@@ -11,35 +11,45 @@ class App extends Component {
   // Tworzymy state - state t- zarezerwowany słowo
   state = {
     persons: [
-      {name:"Jan",age:"67"},
-      {name:"Tomasz",age:"44"},
-      {name:"Zosia"}
-    ]
+      {id:7,name:"Jan",age:"67"},
+      {id:20,name:"Tomasz",age:"44"},
+      {id:301,name:"Zosia"}
+    ],
+    otherState: 'some other state',
+    showPersons: false,
   }
 
-  switchNameHandler = (newName) => {
-    console.log("klilniety", this.state);
-    console.log("self ", this._self);
-    console.log("this ", this);
 
-    //this.state.persons[0] = "Pola"; to nie dzaiała
+  nameChangeHandler = (event, id) => {
+    const persIndex = this.state.persons.findIndex( p=> p.id === id)
+
+    const clickdPersonObj = {...this.state.persons[persIndex]}  //tworzymy nowy obiekt, nie referencje
+
+    clickdPersonObj.name = event.target.value;
+
+
+    const perArr =[...this.state.persons ]; //robimy kopie tablicy state
+    perArr[persIndex] = clickdPersonObj ;  //podmieniamy jeden element tablicy state, tym z nowa nazwa
+
     this.setState({
-      persons: [
-        {name:newName,age:"11"},
-        {name:"Tomasz",age:"44"},
-        {name:"Zosia"}
-      ]
+        persons: perArr
     } )
   }
 
-  nameChangeHandler = (event) => {
+  deletePersonHandler = (personIndex) => {
+    // const perArr =this.state.persons  //! uwaga to jest pointer, wiec zamieniamy oryginalna tablicę
+    const perArr =this.state.persons.slice()  //! Trik na slice powoduje ze dostajemy kopie tablicy
+    // const perArr =[...this.state.persons ]//! tez kopia z uzyciem spread poperator es6
+
+    perArr.splice(personIndex,1)  //usuwa z tablicy element o danym indexie
+    this.setState({persons: perArr})
+  }
+
+
+  togglePersonsHandler = () => {
     this.setState({
-      persons: [
-        {name:"Jan",age:"11"},
-        {name: event.target.value,age:"44"},
-        {name:"Zosia"}
-      ]
-    } )
+      showPersons: !this.state.showPersons
+    })
   }
 
 
@@ -50,6 +60,28 @@ class App extends Component {
       border: '1px solid blue',
       padding: '8px'
     }
+
+    let persons = null;
+
+    //mozemy tu uzyc ifa bo jestesmy w czec js, a nie jsx
+    if (this.state.showPersons) {
+      persons =( //przypiszemy do zmiennej prsons kod jsx
+        <div>
+          {this.state.persons.map( (el,idx) =>{
+            return <Person 
+                name={el.name} 
+                age={el.age} 
+                // click={this.deletePersonHandler.bind(this,idx)}
+                click={() => this.deletePersonHandler(idx)}
+                key={el.id}
+                changed ={(event) => this.nameChangeHandler(event, el.id)}
+                />
+          })}
+      </div>
+      )
+    }
+
+
     return (
       <div className="App">
         <p>Hi, I'm a React App</p>
@@ -57,22 +89,34 @@ class App extends Component {
         {/* <button onClick={this.switchNameHandler.bind(this, "Pola")}>switch</button> */}
         <button 
           style = {style}
-          onClick={() => this.switchNameHandler("Pola") }>switch</button>
-        <Person 
-          name={this.state.persons[0].name} 
-          age ={this.state.persons[0].age} />
-        <Person 
-          name={this.state.persons[1].name} 
-          age ={this.state.persons[1].age} 
-          click={this.switchNameHandler.bind(this, "You !!!")}
-          changed = {this.nameChangeHandler}
-          ><p>Hobby: racing</p></Person>
-        <Person 
-          name={this.state.persons[2].name} 
-          age ={this.state.persons[2].age} />
+          // onClick={() => this.switchNameHandler("Pola") }>switch
+          onClick={this.togglePersonsHandler }>toggle Persons
+          </button>
+
+         {/* persons pzrechowuje kod JSX */}
+         {persons}
+
+
+            {/* {    this.state.showPersons ?     //React.createElement() tak jalkbysmy wywolywaliu ta metode
+            <div>
+              <Person 
+                name={this.state.persons[0].name} 
+                age ={this.state.persons[0].age} />
+              <Person 
+                name={this.state.persons[1].name} 
+                age ={this.state.persons[1].age} 
+                click={this.switchNameHandler.bind(this, "You !!!")}
+                changed = {this.nameChangeHandler}
+                ><p>Hobby: racing</p></Person>
+              <Person 
+                name={this.state.persons[2].name} 
+                age ={this.state.persons[2].age} />
+            </div> : null
+            } */}
+
       </div>      
     )
-    // return React.createElement('div', {className:'App'}, React.createElement('h1', null, 'Jakis tekst')) 
+    // return React.createElement('div', {className:'App'}, React.createElement('h1', null, 'Jakis tekst')) , ale zamiast tgo jest return i kod jsx = html
   }
 }
 
@@ -86,3 +130,5 @@ function App() {
 }
 */
 export default App;
+
+
