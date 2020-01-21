@@ -1,4 +1,5 @@
 import React from 'react';
+import Radium from 'radium';  //radoum to doatkowa bibliotek zeby byl hoover effect
 import  './Person.css';  
 
 
@@ -17,4 +18,4 @@ return (
 )
 };
 
-export default person;
+export default Radium(person);

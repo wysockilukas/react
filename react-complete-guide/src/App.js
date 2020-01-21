@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
+import Radium from 'radium';  //radoum to doatkowa bibliotek zeby byl hoover effect
 
 //! Wazne Person to nasza nazwa komponentu, nie musi byćPerosn, ale powinnop być z dużej litery
 // W React komponenty z małej litery są zarezerwowany na elemnty HTML
@@ -55,11 +56,19 @@ class App extends Component {
 
   render() {  //jsx kompiluje się do kodu ponziej .. React.creatElement...
     const style = {
-      backgroundColor: 'white',
+      backgroundColor: 'green',
+      color: 'white',
       font: 'inherit',
       border: '1px solid blue',
-      padding: '8px'
+      padding: '8px',
+      cursor: 'pointer',
+      ':hover':{
+        backgroundColor: 'lightgreen',
+        color:'black'
+      }    //ta wartosc zostanie pzretłumaczona dzięki Radium
     }
+
+   
 
     let persons = null;
 
@@ -79,13 +88,27 @@ class App extends Component {
           })}
       </div>
       )
+      style.backgroundColor = "red";
+      style.color="white";
+      style[':hover'] = {  //ta wartosc zostanie pzretłumaczona dzięki Radium  
+        backgroundColor: 'salmon',
+        color:'black'
+      } ;   
     }
 
+
+    const parClass = []
+    if (this.state.persons.length <=2) {
+      parClass.push('red');
+    }
+    if (this.state.persons.length <=1) {
+      parClass.push('bold');
+    }
 
     return (
       <div className="App">
         <p>Hi, I'm a React App</p>
-        <p>Zwykły paragraph</p>
+        <p className = {parClass.join(' ')}>Zwykły paragraph</p>
         {/* <button onClick={this.switchNameHandler.bind(this, "Pola")}>switch</button> */}
         <button 
           style = {style}
@@ -129,6 +152,8 @@ function App() {
   );
 }
 */
-export default App;
+
+
+export default Radium(App);  //to się nazywa higher order component
 
 
