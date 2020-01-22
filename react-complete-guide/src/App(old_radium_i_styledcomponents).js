@@ -1,11 +1,26 @@
 import React, {Component} from 'react';
-import classes from './App.module.css';
+import './App.css';
+import Radium from 'radium';  //radoum to doatkowa bibliotek zeby byl hoover effect
+import styled from 'styled-components';
 
 //! Wazne Person to nasza nazwa komponentu, nie musi byćPerosn, ale powinnop być z dużej litery
 // W React komponenty z małej litery są zarezerwowany na elemnty HTML
 import Person from './Person/Person';  
 
 
+const StyledButton = styled.button`
+  background-color: green
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover: {
+    background-color: red;
+    color:black;
+  } 
+`
 
 
 class App extends Component {
@@ -57,10 +72,22 @@ class App extends Component {
 
 
   render() {  //jsx kompiluje się do kodu ponziej .. React.creatElement...
+    const style = {
+      backgroundColor: 'green',
+      color: 'white',
+      font: 'inherit',
+      border: '1px solid blue',
+      padding: '8px',
+      cursor: 'pointer',
+      ':hover':{
+        backgroundColor: 'lightgreen',
+        color:'black'
+      }    //ta wartosc zostanie pzretłumaczona dzięki Radium
+    }
+
+   
 
     let persons = null;
-    let btnClass = [classes.Button];
-
 
     //mozemy tu uzyc ifa bo jestesmy w czec js, a nie jsx
     if (this.state.showPersons) {
@@ -78,29 +105,33 @@ class App extends Component {
           })}
       </div>
       )
-      btnClass.push(classes.Red);
-
+      style.backgroundColor = "red";
+      style.color="white";
+      style[':hover'] = {  //ta wartosc zostanie pzretłumaczona dzięki Radium  
+        backgroundColor: 'salmon',
+        color:'black'
+      } ;   
     }
-
 
 
     const parClass = []
     if (this.state.persons.length <=2) {
-      parClass.push(classes.red);
+      parClass.push('red');
     }
     if (this.state.persons.length <=1) {
-      parClass.push(classes.bold);
+      parClass.push('bold');
     }
 
- 
-
     return (
-      <div className={classes.App}>
+      <div className="App">
         <p>Hi, I'm a React App</p>
         <p className = {parClass.join(' ')}>Zwykły paragraph</p>
         {/* <button onClick={this.switchNameHandler.bind(this, "Pola")}>switch</button> */}
+        <StyledButton>
+          Inny przycisk
+        </StyledButton>
         <button 
-        className = {btnClass.join(' ')}
+          style = {style}
           // onClick={() => this.switchNameHandler("Pola") }>switch
           onClick={this.togglePersonsHandler }>toggle Persons
           </button>
@@ -143,6 +174,6 @@ function App() {
 */
 
 
-export default App;  //to się nazywa higher order component
+export default Radium(App);  //to się nazywa higher order component
 
 
