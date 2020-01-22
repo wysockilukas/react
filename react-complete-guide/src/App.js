@@ -1,10 +1,27 @@
 import React, {Component} from 'react';
 import './App.css';
 import Radium from 'radium';  //radoum to doatkowa bibliotek zeby byl hoover effect
+import styled from 'styled-components';
 
 //! Wazne Person to nasza nazwa komponentu, nie musi byćPerosn, ale powinnop być z dużej litery
 // W React komponenty z małej litery są zarezerwowany na elemnty HTML
 import Person from './Person/Person';  
+
+
+const StyledButton = styled.button`
+  background-color: green
+  color: white;
+  font: inherit;
+  border: 1px solid blue;
+  padding: 8px;
+  cursor: pointer;
+
+  &:hover: {
+    background-color: red;
+    color:black;
+  } 
+`
+
 
 class App extends Component {
 
@@ -110,6 +127,9 @@ class App extends Component {
         <p>Hi, I'm a React App</p>
         <p className = {parClass.join(' ')}>Zwykły paragraph</p>
         {/* <button onClick={this.switchNameHandler.bind(this, "Pola")}>switch</button> */}
+        <StyledButton>
+          Inny przycisk
+        </StyledButton>
         <button 
           style = {style}
           // onClick={() => this.switchNameHandler("Pola") }>switch
