@@ -17,7 +17,19 @@ text-align: center;
 //! Ten component jest stateless bo nie ma w nim żadnego zarządznia stanami
 // Ten kocomponent tylko otrzymuje dane 
 //atrybut click wystepuje w app.js w wywołaniu elementu Person
+
+
 const person = (props)  => {
+
+    const rnd = Math.random()
+
+    //console.log('rnd to ', rnd);
+    
+    if (rnd > 0.7) {
+        throw new Error('Coś poszło nie tak');
+    }
+    
+
 return (
     // <div className="Person">
     <StyledDiv>

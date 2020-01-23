@@ -4,6 +4,7 @@ import classes from './App.module.css';
 //! Wazne Person to nasza nazwa komponentu, nie musi byćPerosn, ale powinnop być z dużej litery
 // W React komponenty z małej litery są zarezerwowany na elemnty HTML
 import Person from './Person/Person';  
+import ErrorBoundary from './ErrorNoundary/ErrorBoundary';
 
 
 
@@ -67,14 +68,17 @@ class App extends Component {
       persons =( //przypiszemy do zmiennej prsons kod jsx
         <div>
           {this.state.persons.map( (el,idx) =>{
-            return <Person 
+            return (
+            <ErrorBoundary key={el.id}>
+                <Person 
                 name={el.name} 
                 age={el.age} 
                 // click={this.deletePersonHandler.bind(this,idx)}
                 click={() => this.deletePersonHandler(idx)}
-                key={el.id}
                 changed ={(event) => this.nameChangeHandler(event, el.id)}
                 />
+              </ErrorBoundary>
+            )
           })}
       </div>
       )
