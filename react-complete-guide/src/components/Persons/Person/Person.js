@@ -21,14 +21,7 @@ text-align: center;
 
 const person = (props)  => {
 
-    const rnd = Math.random()
 
-    //console.log('rnd to ', rnd);
-    
-    if (rnd > 0.7) {
-        throw new Error('Coś poszło nie tak');
-    }
-    
 
 return (
     // <div className="Person">

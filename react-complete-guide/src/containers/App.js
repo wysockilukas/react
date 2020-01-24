@@ -3,8 +3,9 @@ import classes from './App.module.css';
 
 //! Wazne Person to nasza nazwa komponentu, nie musi byćPerosn, ale powinnop być z dużej litery
 // W React komponenty z małej litery są zarezerwowany na elemnty HTML
-import Person from './Person/Person';  
-import ErrorBoundary from './ErrorNoundary/ErrorBoundary';
+
+import Persons from '../components/Persons/Persons';  //Persons to nazwa komponentu = elementu html
+import Cockpit from '../components/Cockpit/Cockpit';
 
 
 
@@ -66,85 +67,24 @@ class App extends Component {
     //mozemy tu uzyc ifa bo jestesmy w czec js, a nie jsx
     if (this.state.showPersons) {
       persons =( //przypiszemy do zmiennej prsons kod jsx
-        <div>
-          {this.state.persons.map( (el,idx) =>{
-            return (
-            <ErrorBoundary key={el.id}>
-                <Person 
-                name={el.name} 
-                age={el.age} 
-                // click={this.deletePersonHandler.bind(this,idx)}
-                click={() => this.deletePersonHandler(idx)}
-                changed ={(event) => this.nameChangeHandler(event, el.id)}
-                />
-              </ErrorBoundary>
-            )
-          })}
+      <div>
+        <Persons persons={this.state.persons} clicked = {this.deletePersonHandler}  changed = {this.nameChangeHandler} />
       </div>
       )
-      btnClass.push(classes.Red);
-
     }
 
 
-
-    const parClass = []
-    if (this.state.persons.length <=2) {
-      parClass.push(classes.red);
-    }
-    if (this.state.persons.length <=1) {
-      parClass.push(classes.bold);
-    }
-
- 
 
     return (
       <div className={classes.App}>
-        <p>Hi, I'm a React App</p>
-        <p className = {parClass.join(' ')}>Zwykły paragraph</p>
-        {/* <button onClick={this.switchNameHandler.bind(this, "Pola")}>switch</button> */}
-        <button 
-        className = {btnClass.join(' ')}
-          // onClick={() => this.switchNameHandler("Pola") }>switch
-          onClick={this.togglePersonsHandler }>toggle Persons
-          </button>
-
-         {/* persons pzrechowuje kod JSX */}
+        <Cockpit  clicked = {this.togglePersonsHandler} showperson = {this.state.showPersons} personscnt = {this.state.persons.length} />
          {persons}
-
-
-            {/* {    this.state.showPersons ?     //React.createElement() tak jalkbysmy wywolywaliu ta metode
-            <div>
-              <Person 
-                name={this.state.persons[0].name} 
-                age ={this.state.persons[0].age} />
-              <Person 
-                name={this.state.persons[1].name} 
-                age ={this.state.persons[1].age} 
-                click={this.switchNameHandler.bind(this, "You !!!")}
-                changed = {this.nameChangeHandler}
-                ><p>Hobby: racing</p></Person>
-              <Person 
-                name={this.state.persons[2].name} 
-                age ={this.state.persons[2].age} />
-            </div> : null
-            } */}
-
       </div>      
     )
     // return React.createElement('div', {className:'App'}, React.createElement('h1', null, 'Jakis tekst')) , ale zamiast tgo jest return i kod jsx = html
   }
 }
 
-/*
-function App() {
-  return (
-    <div className="App">
-      <h1>Hi, I'm a React App</h1>
-    </div>
-  );
-}
-*/
 
 
 export default App;  //to się nazywa higher order component
