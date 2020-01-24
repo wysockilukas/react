@@ -18,7 +18,7 @@ const cockpit = (props) => {
 
     return  (
         <div className = {classes.Cockpit}>
-            <p>To jest paragraf z komponetu cockpit</p>
+            <h1>{props.appTitle}</h1>
             <p className = {parClass.join(' ')}>Zwykły paragraph</p>
             <button 
                 className = {btnClass}
