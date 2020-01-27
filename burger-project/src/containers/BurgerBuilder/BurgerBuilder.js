@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import ReactAux from '../../hoc/ReactAux';
 
+import Burger from '../../components/Burger/Burger';
+
 /*
 Ten komponent jest w folderze containers bo bedzie zareządzał stanami
 */
@@ -9,7 +11,7 @@ class BurgerBuilder extends Component {
     render () {
         return (
             <ReactAux>
-                <div>Burger - preview</div>
+                <Burger />
                 <div>Build Controls</div>
             </ReactAux>
         );
