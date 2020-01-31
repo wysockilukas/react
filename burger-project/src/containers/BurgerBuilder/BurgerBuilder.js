@@ -3,6 +3,9 @@ import ReactAux from '../../hoc/ReactAux';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
+import Modal from '../../components/Layout/UI/Modal/Modal';
+import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
+import BackDrop from '../../components/Layout/UI/Backdrop/Backdrop';
 
 /*
 Ten komponent jest w folderze containers bo bedzie zareządzał stanami
@@ -22,7 +25,8 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat: 0
         },
-        totalPrice: 4
+        totalPrice: 4,
+        purchasing: false
     }
 
     addIngredientHandler  = (type) => {
@@ -53,6 +57,10 @@ class BurgerBuilder extends Component {
         })             
     }
 
+    purchaseHandler = () => {
+        this.setState({purchasing: !this.state.purchasing});
+    }
+
     render () {
         return (
             <ReactAux>
@@ -61,7 +69,12 @@ class BurgerBuilder extends Component {
                     ingredientAdded={this.addIngredientHandler}
                     clickBtn={this.removeIngredientHandler}
                     price={this.state.totalPrice}
+                    orderClick={this.purchaseHandler}
                 />
+                <Modal show={this.state.purchasing}> 
+                    <OrderSummary dane={this.state}  prices={ingredient_prices}/>
+                </Modal>
+                <BackDrop closeModal={this.purchaseHandler} show={this.state.purchasing}/>
             </ReactAux>
         );
 

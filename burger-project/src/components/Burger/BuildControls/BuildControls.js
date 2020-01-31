@@ -37,7 +37,11 @@ const buildControls = (props) => {
         <div className={classes.BuildControls}>
             <p>Cena całkowita to: <strong>{props.price.toFixed(2)}</strong></p>
             {controlsComponents}
-            { ( (props.price <=4) ?  <button disabled className={classes.OrderButton}>ZAMÓW</button> : <button  className={classes.OrderButton}>ZAMÓW</button>)}
+            { 
+                (
+                     (props.price <=4) ?  <button disabled className={classes.OrderButton}>ZAMÓW</button> : <button onClick={props.orderClick} className={classes.OrderButton}>ZAMÓW</button>
+                )
+            }
             
         </div>
     );
