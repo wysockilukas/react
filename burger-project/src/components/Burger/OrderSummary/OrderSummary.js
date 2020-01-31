@@ -1,7 +1,7 @@
 import React from 'react';
 // import classes from './Modal.module.css';
 import ReactAux from '../../../hoc/ReactAux';
-
+import Button from '../../Layout/UI/Button/Button';
 
 
 
@@ -23,6 +23,9 @@ const orderSummary = (props) => {
                 {ingred}
             </ul>
             <p>Total: {props.dane.totalPrice.toFixed(2)}</p>
+            <p><strong>Do kasy?</strong></p>
+            <Button clicked={props.closeModal} btnType="Danger">Anuluj</Button>
+            <Button clicked={props.closeModal} btnType="Success">Dalej</Button>
         </ReactAux>
     );
 } 
