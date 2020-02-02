@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import ReactAux from '../../hoc/ReactAux';
+import ReactAux from '../../hoc/ReactAux/ReactAux';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
-import Modal from '../../components/Layout/UI/Modal/Modal';
+import Modal from '../../hoc/Layout/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import BackDrop from '../../components/Layout/UI/Backdrop/Backdrop';
+import BackDrop from '../../hoc/Layout/UI/Backdrop/Backdrop';
 
 /*
 Ten komponent jest w folderze containers bo bedzie zareządzał stanami
