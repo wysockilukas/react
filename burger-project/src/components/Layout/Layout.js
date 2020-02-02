@@ -1,20 +1,45 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactAux from '../../hoc/ReactAux';
 import classes from './Layout.module.css';
 import Toolbar from '../../components/Navigation/Toolbar/Toolbar';
+import SideDrawer from '../../components/Navigation/SideDrawer/SideDrawer';
 
+class Layout extends Component {
+    
+    state = {
+        showSideDrawer : false
+    }
+    
+    SideDrawerCloseHandler = () => {
+        this.setState({showSideDrawer:false});
+    }
 
-const layout = (props) => {
-    return (
-        <ReactAux>
-            <Toolbar />
-            <div>Toolbar, SideDrawer, Backdrop</div>
-            <main className = {classes.Content}>
-                {props.children}
-            </main>
-        </ReactAux>
-    )
+    ToogleMenuHandler =() => {
+
+        //to jest złe roziązanie bo state jets zmieniany asynchronicznie i 
+        // this.setState({showSideDrawer:  !this.state.showSideDrawer  }); 
+
+        //to jest dobre rowziązanie
+        this.setState( (prevState) =>  {
+            return  {showSideDrawer: !prevState.showSideDrawer}
+        }  )
+    }
+    
+    render () {
+        return (
+            <ReactAux>
+                <Toolbar toogleMenu={this.ToogleMenuHandler}/>
+                <SideDrawer 
+                    open ={this.state.showSideDrawer} 
+                    closed = {this.SideDrawerCloseHandler}/>
+                <div>Toolbar, SideDrawer, Backdrop</div>
+                <main className = {classes.Content}>
+                    {this.props.children}
+                </main>
+            </ReactAux>
+        )
+    }
 };
 
 
-export default layout;
+export default Layout;

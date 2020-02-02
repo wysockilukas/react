@@ -74,7 +74,7 @@ class BurgerBuilder extends Component {
                 <Modal show={this.state.purchasing}> 
                     <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler}/>
                 </Modal>
-                <BackDrop closeModal={this.purchaseHandler} show={this.state.purchasing}/>
+                <BackDrop clicked={this.purchaseHandler} show={this.state.purchasing}/>
             </ReactAux>
         );
 
