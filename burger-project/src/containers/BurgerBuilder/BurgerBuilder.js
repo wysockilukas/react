@@ -7,6 +7,7 @@ import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../hoc/Layout/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 import BackDrop from '../../hoc/Layout/UI/Backdrop/Backdrop';
+import Spinner from '../../hoc/Layout/UI/Spinner/Spinner';
 
 /*
 Ten komponent jest w folderze containers bo bedzie zareządzał stanami
@@ -27,7 +28,8 @@ class BurgerBuilder extends Component {
             meat: 0
         },
         totalPrice: 4,
-        purchasing: false
+        purchasing: false,
+        loading: false
     }
 
     addIngredientHandler  = (type) => {
@@ -63,6 +65,7 @@ class BurgerBuilder extends Component {
     }
 
     purchaseContinueHandler = () => {
+        this.setState({loading:true});
         // console.log('dalej');
         const orders = {
             ingredients: this.state.ingredients,
@@ -79,14 +82,23 @@ class BurgerBuilder extends Component {
             deliveryMethod: 'dron'
         };
         axios.post('/orders.json' , orders).then( res => {
-            console.log(res);
+            // console.log(res);
+            this.setState({loading:false, purchasing : false});
         }).catch( err=> {
             console.log(err);
+            this.setState({loading:false, purchasing : false});
         })
 
     }   
 
     render () {
+
+        let inModalEl = <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler} goBuy={this.purchaseContinueHandler} />;
+        if (this.state.loading) {
+            inModalEl = <Spinner /> ;
+        }
+
+
         return (
             <ReactAux>
                 <Burger ingredients = {this.state.ingredients}/>
@@ -97,7 +109,7 @@ class BurgerBuilder extends Component {
                     orderClick={this.purchaseHandler}
                 />
                 <Modal show={this.state.purchasing}> 
-                    <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler} goBuy={this.purchaseContinueHandler} />
+                {inModalEl}
                 </Modal>
                 <BackDrop clicked={this.purchaseHandler} show={this.state.purchasing}/>
             </ReactAux>
