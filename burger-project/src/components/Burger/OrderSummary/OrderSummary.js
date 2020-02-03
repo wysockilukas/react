@@ -15,7 +15,7 @@ const orderSummary = (props) => {
         )
     })
 
-    console.log(props.totalPrice);
+    // console.log(props.totalPrice);
     return (
         <ReactAux>
             <h3>Twoje zamówienie</h3>
@@ -25,7 +25,7 @@ const orderSummary = (props) => {
             <p>Total: {props.dane.totalPrice.toFixed(2)}</p>
             <p><strong>Do kasy?</strong></p>
             <Button clicked={props.closeModal} btnType="Danger">Anuluj</Button>
-            <Button clicked={props.closeModal} btnType="Success">Dalej</Button>
+            <Button clicked={props.goBuy} btnType="Success">Dalej</Button>
         </ReactAux>
     );
 } 

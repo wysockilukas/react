@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import ReactAux from '../../hoc/ReactAux/ReactAux';
+import axios from '../../axios-orders';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
@@ -61,6 +62,30 @@ class BurgerBuilder extends Component {
         this.setState({purchasing: !this.state.purchasing});
     }
 
+    purchaseContinueHandler = () => {
+        // console.log('dalej');
+        const orders = {
+            ingredients: this.state.ingredients,
+            totalPrice: this.state.totalPrice,
+            customer: {
+                name: 'Jan',
+                address: {
+                    stret: "test",
+                    zipcode: "111"
+                },
+                email: 'test@test.com'
+
+            },
+            deliveryMethod: 'dron'
+        };
+        axios.post('/orders.json' , orders).then( res => {
+            console.log(res);
+        }).catch( err=> {
+            console.log(err);
+        })
+
+    }   
+
     render () {
         return (
             <ReactAux>
@@ -72,7 +97,7 @@ class BurgerBuilder extends Component {
                     orderClick={this.purchaseHandler}
                 />
                 <Modal show={this.state.purchasing}> 
-                    <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler}/>
+                    <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler} goBuy={this.purchaseContinueHandler} />
                 </Modal>
                 <BackDrop clicked={this.purchaseHandler} show={this.state.purchasing}/>
             </ReactAux>
