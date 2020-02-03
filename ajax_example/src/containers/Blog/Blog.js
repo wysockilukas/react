@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
+import axios from '../../axios';
 
 import Post from '../../components/Post/Post';
 import FullPost from '../../components/FullPost/FullPost';
@@ -11,11 +12,12 @@ class Blog extends Component {
 
     state = {
         posts: [],
-        selectedPostId: null
+        selectedPostId: null,
+        error: null
     }
 
     componentDidMount() {
-        axios.get('https://jsonplaceholder.typicode.com/posts')
+        axios.get('/posts')
             .then( res => {
                 const posts  = res.data.slice(0,4);
                 const updatedPosts = posts.map( el => {
@@ -25,7 +27,11 @@ class Blog extends Component {
                     }
                 })
                 this.setState({posts:  updatedPosts});
-            });
+            })
+            .catch( err => {
+                this.setState({error:true});
+            })
+            ;
     }
 
 
@@ -36,14 +42,18 @@ class Blog extends Component {
 
     render () {
 
-        const posts = this.state.posts.map( (el,idx) => {
-            return <Post 
-                key={el.id} 
-                title={el.title} 
-                author={el.author}
-                clicked = { () =>  this.postSelectedHandler(el.id)}
-                />
-        })
+        let posts = <p style ={{textAlign:"center", color:"red", fontWeight:"bold"}}>Coś poszło nie tak</p>;
+        if (!this.state.error) {
+             posts = this.state.posts.map( (el,idx) => {
+                return <Post 
+                    key={el.id} 
+                    title={el.title} 
+                    author={el.author}
+                    clicked = { () =>  this.postSelectedHandler(el.id)}
+                    />
+            })
+        }
+
 
         return (
             <div>
