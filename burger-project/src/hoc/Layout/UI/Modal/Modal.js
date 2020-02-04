@@ -1,6 +1,8 @@
 import React from 'react';
 import classes from './Modal.module.css';
 
+import ReactAux from '../../../ReactAux/ReactAux';
+import Backdrop from '../Backdrop/Backdrop';
 
 
 
@@ -10,6 +12,8 @@ import classes from './Modal.module.css';
 const modal = (props) => {
 
     return (
+        <ReactAux>
+         <Backdrop show={props.show} clicked={props.modalClosed} />
         <div 
             style={
                 {
@@ -20,7 +24,8 @@ const modal = (props) => {
             className={classes.Modal}
         > 
             {props.children}
-        </div>
+        </div>           
+        </ReactAux>
     );
 } 
 
