@@ -1,5 +1,6 @@
 import React, { Component } from 'react'   ;
 import axios from '../../../axios';
+import { Link} from 'react-router-dom';
 
 import Post from '../../../components/Post/Post';
 import './Posts.css';
@@ -34,7 +35,8 @@ class Posts extends Component {
 
 
     postSelectedHandler = (id) => {
-        this.setState({selectedPostId:id});
+        // this.setState({selectedPostId:id});
+        // this.props.history.push('/' + id) //przekierowanie 
     }
 
 
@@ -44,12 +46,15 @@ class Posts extends Component {
         let posts = <p style ={{textAlign:"center", color:"red", fontWeight:"bold"}}>Coś poszło nie tak</p>;
         if (!this.state.error) {
              posts = this.state.posts.map( (el,idx) => {
-                return <Post 
-                    key={el.id} 
-                    title={el.title} 
-                    author={el.author}
-                    clicked = { () =>  this.postSelectedHandler(el.id)}
-                    />
+                return  (
+                    <Link key={el.id} to={"/" + el.id} >
+                        <Post 
+                        title={el.title} 
+                        author={el.author}
+                        clicked = { () =>  this.postSelectedHandler(el.id)}
+                        />
+                    </Link>
+                )
             })
         }
 

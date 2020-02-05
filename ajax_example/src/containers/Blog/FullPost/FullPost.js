@@ -11,16 +11,22 @@ class FullPost extends Component {
         loadedPost: null
     }
 
-    componentDidUpdate () {
-        if ( this.props.id ) {
-            if ( !this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== this.props.id) ) {
-                axios.get( '/posts/' + this.props.id )
+    componentDidMount () {
+        console.log('Full post DidMount');
+        const id = this.props.match.params.id;
+        if ( id ) {
+            if ( !this.state.loadedPost || (this.state.loadedPost && this.state.loadedPost.id !== id) ) {
+                axios.get( '/posts/' + id )
                     .then( response => {
                         // console.log(response);
                         this.setState( { loadedPost: response.data } );
                     } );
             }
         }
+    }
+
+    componentDidUpdate() {
+        console.log('Full post DidUpdate');
     }
 
     deletePostHander = () => {
