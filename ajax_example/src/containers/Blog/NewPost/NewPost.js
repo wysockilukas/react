@@ -10,6 +10,10 @@ class NewPost extends Component {
         author: 'Max'
     }
 
+    componentDidMount() {
+        console.log('Jestem w NewPost componentDidMount');
+        console.log(this.props);;
+    }
 
     postaDataHnadler = () => {
         axios.post('/posts', {
