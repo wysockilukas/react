@@ -8,7 +8,7 @@ class App extends Component {
   render() {
     return (
       // Bedziemy mogli uzyc routingu we wszysktich komponentach, ktore sa dziecmi BrowserRouter
-      <BrowserRouter>  
+      <BrowserRouter basename="/posts">  
       <div className="App">
         <Blog />
       </div> 
