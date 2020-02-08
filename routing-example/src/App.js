@@ -1,12 +1,42 @@
 import React, { Component } from 'react';
+import {BrowserRouter, Route, Link,NavLink, Switch, Redirect}  from 'react-router-dom';
+
+
 
 import Courses from './containers/Courses/Courses';
+import Course from './containers/Course/Course';
 import Users from './containers/Users/Users';
 
 class App extends Component {
   render () {
     return (
-      <div className="App">
+
+    <React.Fragment>
+      <BrowserRouter>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/">Home</Link>
+          </li>
+          <li>
+           <NavLink to="/users">Users</NavLink>
+          </li>
+          <li>
+            <Link to="/courses">Courses</Link>
+          </li>
+        </ul>
+        </nav>
+      <Switch>
+        {/* <Route path="/courses/:id/:title"   component={Course}/> */}
+        <Route path="/users"    component={Users}/>
+        <Route path="/courses"   component={Courses}/>
+        <Redirect from="/all-courses" to="/courses" />
+        <Route render = { () => <h1>404</h1>} />
+      </Switch>
+      </BrowserRouter>
+
+
+      <div className="App" style={{"display":"none"}}> 
         <ol style={{textAlign: 'left'}}>
           <li>Add Routes to load "Users" and "Courses" on different pages (by entering a URL, without Links)</li>
           <li>Add a simple navigation with two links => One leading to "Users", one leading to "Courses"</li>
@@ -17,7 +47,10 @@ class App extends Component {
           <li>Add a 404 error page and render it for any unknown routes</li>
           <li>Redirect requests to /all-courses to /courses (=> Your "Courses" page)</li>
         </ol>
-      </div>
+      </div>      
+    </React.Fragment>
+
+
     );
   }
 }
