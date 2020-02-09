@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import classes from './Burger.module.css';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
+import {withRouter} from 'react-router-dom';
 
 // ingredients to obiekt zawierajacy dodatek i ich ilość 
 // ale cchemy zeby byl tablicą, bo wtedy będziemy mogli użyc funkcji map
@@ -37,4 +38,4 @@ const burger= (props) => {
 };
 
 
-export default burger;
+export default withRouter(burger);

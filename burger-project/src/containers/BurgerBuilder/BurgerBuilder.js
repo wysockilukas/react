@@ -31,6 +31,7 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props);
         axios.get('https://react-my-burger-11471.firebaseio.com/ingredients.json')
             .then( res => {
                 this.setState({ingredients: res.data});
@@ -98,7 +99,10 @@ class BurgerBuilder extends Component {
 
     }  ; 
 
-
+    goToCheckout = () => {
+        // console.log(this.props);
+        this.props.history.push('/checkout');
+    }
 
     render () {
 
@@ -121,7 +125,13 @@ class BurgerBuilder extends Component {
         let inModalEl = null;
 
         if (this.state.ingredients) {
-            inModalEl = <OrderSummary dane={this.state}  prices={ingredient_prices} closeModal={this.purchaseHandler} goBuy={this.purchaseContinueHandler} />;
+            inModalEl = <OrderSummary 
+                            dane={this.state}  
+                            prices={ingredient_prices} 
+                            closeModal={this.purchaseHandler} 
+                            // goBuy={this.purchaseContinueHandler} 
+                            goBuy={this.goToCheckout} 
+                        />;
         }
 
         if (this.state.loading) {

@@ -2,6 +2,7 @@ import React from 'react';
 // import classes from './Modal.module.css';
 import ReactAux from '../../../hoc/ReactAux/ReactAux';
 import Button from '../../../hoc/Layout/UI/Button/Button';
+import {Link} from 'react-router-dom';
 
 
 
@@ -25,7 +26,9 @@ const orderSummary = (props) => {
             <p>Total: {props.dane.totalPrice.toFixed(2)}</p>
             <p><strong>Do kasy?</strong></p>
             <Button clicked={props.closeModal} btnType="Danger">Anuluj</Button>
-            <Button clicked={props.goBuy} btnType="Success">Dalej</Button>
+            {/* <Link to="/checkout"> */}
+                <Button clicked={props.goBuy} btnType="Success">Dalej</Button>
+            {/* </Link> */}
         </ReactAux>
     );
 } 
