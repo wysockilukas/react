@@ -102,7 +102,8 @@ class BurgerBuilder extends Component {
     goToCheckout = () => {
         // console.log(this.props);
         const ingredientsToPass = JSON.stringify(this.state.ingredients);
-        this.props.history.push('/checkout?ingredients=' + encodeURIComponent(ingredientsToPass));
+        const totalPriceToPass = JSON.stringify(this.state.totalPrice);
+        this.props.history.push('/checkout?ingredients=' + encodeURIComponent(ingredientsToPass) + "&totalPrice=" + encodeURIComponent(totalPriceToPass) );
         // this.props.history.push({
         //     pathname: '/checkout',
         //     // search: '?' + encodeURIComponent(ingredientsToPass)
