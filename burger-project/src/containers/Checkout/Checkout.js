@@ -4,6 +4,7 @@ import {Route} from 'react-router-dom';
 import ContactData from './ContactData/ContactData';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
+
 class Checkout extends Component {
 
     state = {
