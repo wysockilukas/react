@@ -1,7 +1,7 @@
 import React from 'react';
 // import classes from './Modal.module.css';
 import ReactAux from '../../../hoc/ReactAux/ReactAux';
-import Button from '../../../hoc/Layout/UI/Button/Button';
+import Button from '../../../components/UI/Button/Button';
 import {Link} from 'react-router-dom';
 
 

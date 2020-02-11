@@ -6,10 +6,10 @@ import axios from '../../axios-orders';
 
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
-import Modal from '../../hoc/Layout/UI/Modal/Modal';
+import Modal from '../../components/UI/Modal/Modal';
 import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
-import BackDrop from '../../hoc/Layout/UI/Backdrop/Backdrop';
-import Spinner from '../../hoc/Layout/UI/Spinner/Spinner';
+import BackDrop from '../../components/UI/Backdrop/Backdrop';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 /*
 Ten komponent jest w folderze containers bo bedzie zareządzał stanami

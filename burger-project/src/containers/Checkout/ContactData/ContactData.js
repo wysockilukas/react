@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import axios from '../../../axios-orders';
 
-import Button from '../../../hoc/Layout/UI/Button/Button';
-import Spinner from '../../../hoc/Layout/UI/Spinner/Spinner';
+import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
 
 import classes from './ContactData.module.css';
 
