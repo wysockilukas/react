@@ -70,13 +70,22 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault();
-        console.log(this.props.ingredients);
-        console.log(this.props.totalPrice);
+        // console.log(this.props.ingredients);
+        // console.log(this.props.totalPrice);
 
         this.setState({loading:true});
+
+        const formData = {};
+        Object.keys(this.state.orderForm).forEach( name =>  {
+            formData[name] = this.state.orderForm[name].value;
+        }  );
+
+        // console.log(formData);
+
         const orders = {
             ingredients: this.props.ingredients,
             totalPrice: this.props.totalPrice,
+            orderData: formData
         };
         axios.post('/orders.json' , orders).then( res => {
             // console.log(res);
@@ -90,17 +99,49 @@ class ContactData extends Component {
 
     }
 
+    inputChangedHandler = (event, inputIdentifier) => {
+        // console.log(event.target.value);
+        const updatedOrderForm = {
+            ...this.state.orderForm  //ten kolon nie jest gleboki bo biekt jest nested wiec zrobimy ten trik na tym co nam zwroci
+        };
+        const updatedOrderFormElement = {...updatedOrderForm[inputIdentifier]};
+        updatedOrderFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedOrderFormElement;
+        // console.log(updatedOrderForm);
+        this.setState({orderForm:updatedOrderForm});
+    }
+
     render () {
 
+
+        const formElementsArray = [];
+        for (let key in  this.state.orderForm) {
+                formElementsArray.push( {
+                    id: key,
+                    config: this.state.orderForm[key]
+                } )
+        }
+
+        // Object.keys(this.state.orderForm).forEach( el => arr.push({...this.state.orderForm[el], name:el}));
+
+
+        // console.log(formElementsArray);
         let form = (
-            <form>
-            <Input elementType="input"   value=""  elementConfig={this.state.orderForm.name.elementConfig}/>
-            <Input elementType="input"   value=""  elementConfig={this.state.orderForm.email.elementConfig}/>
-            <Input elementType="input"   value="" elementConfig={this.state.orderForm.street.elementConfig}/>
-            <Input elementType="input"   value="" elementConfig={this.state.orderForm.zipCode.elementConfig}/>
-            <Input elementType="select"  value=""  elementConfig={this.state.orderForm.deliveryMethod.elementConfig}/>
-            <Button btnType="Success"   value=""  clicked={this.orderHandler}>Zamów</Button>
-        </form>
+            <form onSubmit={this.orderHandler}>
+                {/* <Input elementType="input"   value=""  elementConfig={this.state.orderForm.name.elementConfig}/> */}
+                {formElementsArray.map(el => (
+                    <Input 
+                        key={el.id} 
+                        name ={el.id} 
+                        elementType={el.config.elementType}  
+                        value={el.config.value}  
+                        elementConfig={el.config.elementConfig}
+                        changed = {(event) => this.inputChangedHandler(event,el.id)}
+                        />
+                    ))}
+                {/* <Button btnType="Success"   value=""  clicked={this.orderHandler}>Zamów</Button> */}
+                <Button btnType="Success"   value=""  >Zamów</Button>
+            </form>
         )
 
         if (this.state.loading) {
