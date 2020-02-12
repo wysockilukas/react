@@ -102,7 +102,7 @@ class ContactData extends Component {
         // console.log(this.props.ingredients);
         // console.log(this.props.totalPrice);
 
-        let formIsValid = true
+        // let formIsValid = true
         const formData = {};
         Object.keys(this.state.orderForm).forEach( name =>  {
             formData[name] = this.state.orderForm[name].value;
@@ -145,7 +145,7 @@ class ContactData extends Component {
         if (Object.keys(rules).length === 0) return true;
         let isValid = false
         if (rules.required) {
-           isValid = (value.trim() !='') 
+           isValid = (value.trim() !=='') 
         }
         if (rules.minLenght) {
             isValid = (value.length >=rules.minLenght)
