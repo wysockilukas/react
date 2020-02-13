@@ -6,7 +6,7 @@ import CounterOutput from '../../components/CounterOutput/CounterOutput';
 
 class Counter extends Component {
     state = {
-        counter: 0
+        counter: 2
     }
 
     counterChangedHandler = ( action, value ) => {
@@ -29,11 +29,21 @@ class Counter extends Component {
     render () {
         return (
             <div>
-                <CounterOutput value={this.props.ctr} />
-                <CounterControl label="Increment" clicked={() => this.counterChangedHandler( 'inc' )} />
-                <CounterControl label="Decrement" clicked={() => this.counterChangedHandler( 'dec' )}  />
-                <CounterControl label="Add 5" clicked={() => this.counterChangedHandler( 'add', 5 )}  />
-                <CounterControl label="Subtract 5" clicked={() => this.counterChangedHandler( 'sub', 5 )}  />
+                <CounterOutput value={this.props.ctr} st_value = {this.state.counter}/>
+                <CounterControl label="Increment" clicked={this.props.onIncrementCounter} />
+                <CounterControl label="Decrement" clicked={this.props.onDecrementCounter}  />
+                <CounterControl label="Add 5" clicked={this.props.onAddCounter} />
+                <CounterControl label="Subtract 5" clicked={this.props.onSubstractCounter}  />
+                <hr />
+                <button onClick={this.props.onStoreResult}>Store Result</button>
+                <ul>
+                    {
+                        this.props.storedResults.map( (el,idx) => (
+                            <li key={el.id} onClick={ () => this.props.onDeleteResult(el.id)}> {el.value}</li>
+                        ))
+                    }
+                    
+                </ul>
             </div>
         );
     }
@@ -42,11 +52,24 @@ class Counter extends Component {
 
 const mapStateToProps = zz => {
     return {
-        ctr: zz.counter  // uwaga ten state to initialState z pliku redux.js, a nie state z góry
+        ctr: zz.counter,  // uwaga ten state to initialState z pliku redux.js, a nie state z góry
+        storedResults: zz.results
     }
 };
 
-export default connect(mapStateToProps)(Counter) ;
+const mapDispatchToProps = fn => {
+    return {
+        onIncrementCounter: () => fn({type: 'INCREMENT'}) ,
+        onDecrementCounter: () => fn({type: 'DECREMENT'}),
+        onAddCounter: () => fn({type: 'ADD', value: 5}),
+        onSubstractCounter: () => fn({type: 'SUBSTRACT', payload:{value: 5}}),
+        onStoreResult: () => fn({type: 'STORE_RESULT'}),
+        onDeleteResult: (clickedKeyId) => fn({type: 'DELETE_RESULT', keyId: clickedKeyId})
+
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Counter) ;
 
 /*
 jako argumenty funkcji counter przeklazujemy dwa argumenty
