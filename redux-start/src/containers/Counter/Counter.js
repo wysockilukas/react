@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
 
+import * as actionTypes from '../../store/actions';
+
 class Counter extends Component {
     state = {
         counter: 2
@@ -35,7 +37,7 @@ class Counter extends Component {
                 <CounterControl label="Add 5" clicked={this.props.onAddCounter} />
                 <CounterControl label="Subtract 5" clicked={this.props.onSubstractCounter}  />
                 <hr />
-                <button onClick={this.props.onStoreResult}>Store Result</button>
+                <button onClick={() => this.props.onStoreResult(this.props.ctr)}>Store Result</button>
                 <ul>
                     {
                         this.props.storedResults.map( (el,idx) => (
@@ -50,20 +52,33 @@ class Counter extends Component {
 }
 
 
+// Gdy mamy jeden reducer
+/*
 const mapStateToProps = zz => {
     return {
         ctr: zz.counter,  // uwaga ten state to initialState z pliku redux.js, a nie state z góry
         storedResults: zz.results
     }
 };
+*/
+
+//gdy mamy wiele reducers
+const mapStateToProps = zz => {
+    return {
+        ctr: zz.ctr.counter,  // uwaga ten state to initialState z pliku redux.js, a nie state z góry
+        storedResults: zz.res.results
+    }
+};
+
 
 const mapDispatchToProps = fn => {
     return {
-        onIncrementCounter: () => fn({type: 'INCREMENT'}) ,
+        onIncrementCounter: () => fn({type: actionTypes.INCREMENT}) ,
         onDecrementCounter: () => fn({type: 'DECREMENT'}),
         onAddCounter: () => fn({type: 'ADD', value: 5}),
         onSubstractCounter: () => fn({type: 'SUBSTRACT', payload:{value: 5}}),
-        onStoreResult: () => fn({type: 'STORE_RESULT'}),
+        onStoreResult: (inVal) => fn({type: 'STORE_RESULT', result: inVal}),
+        // onStoreResult: () => fn({type: 'STORE_RESULT'}),  // gdy był jeden reducer, bo wtedy reducer mial dostep i do couiunter i results
         onDeleteResult: (clickedKeyId) => fn({type: 'DELETE_RESULT', keyId: clickedKeyId})
 
     }

@@ -1,4 +1,6 @@
 
+import * as actionTypes from './actions';
+
 const initialState = {
     counter: 42,
     results: []
@@ -9,39 +11,39 @@ const initialState = {
 const reducer = (state = initialState, action) => {
 
 
-    if (action.type==='INCREMENT') {
+    if (action.type===actionTypes.INCREMENT) {
         //nigdy nie modyfikujemy oryginalnego statu
         const newState = Object.assign({}, state);  // Uwaga to nie jest deep copy bo do array dalej jest referencja
         newState.counter = state.counter +1;
         return newState
     }
-    if (action.type==='DECREMENT') {
+    if (action.type===actionTypes.DECREMENT) {
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             counter: state.counter - 1
         }
     }    
-    if (action.type==='ADD') {
+    if (action.type===actionTypes.ADD) {
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             counter: state.counter  + action.value
         }
     } 
-    if (action.type==='SUBSTRACT') {
+    if (action.type===actionTypes.SUBSTRACT) {
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             counter: state.counter - action.payload.value
         }
     }     
  
-    if (action.type==='STORE_RESULT') {
+    if (action.type===actionTypes.STORE_RESULT) {
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             results:  state.results.concat({ id: new Date(),  value:state.counter })    //to jest jak push ale zwraca nowa tablice
         }
     }      
  
-    if (action.type==='DELETE_RESULT') {
+    if (action.type===actionTypes.DELETE_RESULT) {
         
         //state.results.splice(id,1) ale tego nie wykorzystamy bo to mutate nasz state 
 
