@@ -10,10 +10,14 @@ const reducer = (state = initialState, action) => {
 
     // console.log('Jestem tu ', state);
     if (action.type ==='ADD_PERSON') {
+        console.log('Dostaje ', action);
         const newPerson = {
             id: Math.random(), // not really unique but good enough here!
-            name: (Math.floor( Math.random() * 800 ) +100).toString().split('').map( l => String.fromCharCode(65 + ( +l )) ).join(''),
-            age: Math.floor( Math.random() * 40 )
+            // name: (Math.floor( Math.random() * 800 ) +100).toString().split('').map( l => String.fromCharCode(65 + ( +l )) ).join(''),
+            // age: Math.floor( Math.random() * 40 ),
+            test: action.test,
+            name: action.name,
+            age: action.age
         }
         const newState = state.persons.concat(newPerson)
         // console.log('new state to ', newState);
