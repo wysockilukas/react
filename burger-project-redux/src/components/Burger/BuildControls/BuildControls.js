@@ -27,6 +27,8 @@ const buildControls = (props) => {
                 type = {el.type}
                 added={ () =>  props.ingredientAdded(el.type)  }
                 clickBtn = {props.clickBtn}
+                // clickBtn = {() => props.clickBtn(el.type) }
+
             />
         )
     })
