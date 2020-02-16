@@ -1,5 +1,5 @@
 
-import * as actionTypes from '../actions';
+import * as actionTypes from '../actions/actions';
 
 const initialState = {
     counter: 42
@@ -23,12 +23,14 @@ const reducer = (state = initialState, action) => {
         }
     }    
     if (action.type===actionTypes.ADD) {
+        // console.log('aa1 ', action);
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             counter: state.counter  + action.value
         }
     } 
     if (action.type===actionTypes.SUBSTRACT) {
+        // console.log('aa ', action);
         return {
             ...state,  //nigdy nie modyfikujemy oryginalnego statu
             counter: state.counter - action.payload.value

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
+// import { increment}  from '../../store/actions/actions';
 
 import CounterControl from '../../components/CounterControl/CounterControl';
 import CounterOutput from '../../components/CounterOutput/CounterOutput';
 
-import * as actionTypes from '../../store/actions';
+import * as actionTypes from '../../store/actions/actions';
 
 class Counter extends Component {
     state = {
@@ -73,13 +74,15 @@ const mapStateToProps = zz => {
 
 const mapDispatchToProps = fn => {
     return {
-        onIncrementCounter: () => fn({type: actionTypes.INCREMENT}) ,
-        onDecrementCounter: () => fn({type: 'DECREMENT'}),
-        onAddCounter: () => fn({type: 'ADD', value: 5}),
-        onSubstractCounter: () => fn({type: 'SUBSTRACT', payload:{value: 5}}),
-        onStoreResult: (inVal) => fn({type: 'STORE_RESULT', result: inVal}),
+        onIncrementCounter: () => fn( actionTypes.increment() ) ,
+        onDecrementCounter: () => fn(actionTypes.decrement()),
+        onAddCounter: () => fn( actionTypes.add(5)),
+        onSubstractCounter: () => fn( actionTypes.substract({payload:{value: 5}})),
+        // onStoreResult: (inVal) => fn({type: 'STORE_RESULT', result: inVal}),
+        onStoreResult: (inVal) => fn( actionTypes.store_result(inVal)),
         // onStoreResult: () => fn({type: 'STORE_RESULT'}),  // gdy był jeden reducer, bo wtedy reducer mial dostep i do couiunter i results
-        onDeleteResult: (clickedKeyId) => fn({type: 'DELETE_RESULT', keyId: clickedKeyId})
+        // onDeleteResult: (clickedKeyId) => fn({type: 'DELETE_RESULT', keyId: clickedKeyId})
+        onDeleteResult: (clickedKeyId) => fn(actionTypes.delete_result(clickedKeyId))
 
     }
 }
