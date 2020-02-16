@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import axios from '../../../axios-orders';
+import {connect} from 'react-redux';
 
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
@@ -116,8 +117,8 @@ class ContactData extends Component {
         // console.log(formData);
         this.setState({loading:true});
         const orders = {
-            ingredients: this.props.ingredients,
-            totalPrice: this.props.totalPrice,
+            ingredients: this.props.reduxIngredients,
+            totalPrice: this.props.reduxTotalPrice,
             orderData: formData
         };
         axios.post('/orders.json' , orders).then( res => {
@@ -230,5 +231,15 @@ class ContactData extends Component {
     }
 };
 
-export default ContactData;
+
+
+const mapStateToProps = zz => {
+    return {
+        reduxIngredients: zz.ingredients,
+        reduxTotalPrice: zz.totalPrice
+    }
+};
+
+
+export default connect(mapStateToProps)(ContactData);
 

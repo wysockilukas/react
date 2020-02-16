@@ -10,9 +10,12 @@ import Button from '../../../components/UI/Button/Button';
 
 const orderSummary = (props) => {
 
-    const ingred = Object.keys(props.dane.ingredients).map( (el, idx) =>{
+    console.log('orderSummary ', props);
+
+    const ingred = Object.keys(props.dane.reduxIngredients).map( (el, idx) =>{
         return (
-         <li key={idx}><span style={{textTransform:'capitalize'}}>{el}</span>:   {props.dane.ingredients[el]} x {props.prices[el]}  = { props.dane.ingredients[el] * props.prices[el]  }  </li>
+        //  <li key={idx}><span style={{textTransform:'capitalize'}}>{el}</span>:   {props.dane.ingredients[el]} x {props.prices[el]}  = { props.dane.ingredients[el] * props.prices[el]  }  </li>
+         <li key={idx}><span style={{textTransform:'capitalize'}}>{el}</span>:   {props.dane.reduxIngredients[el]}   = { props.dane.reduxIngredients[el]  }  </li>
         )
     })
 
@@ -23,7 +26,7 @@ const orderSummary = (props) => {
             <ul>
                 {ingred}
             </ul>
-            <p>Total: {props.dane.totalPrice.toFixed(2)}</p>
+            <p>Total: {props.dane.reduxTotalPrice.toFixed(2)}</p>
             <p><strong>Do kasy?</strong></p>
             <Button clicked={props.closeModal} btnType="Danger">Anuluj</Button>
             {/* <Link to="/checkout"> */}

@@ -10,6 +10,14 @@ const initialState = {
     totalPrice: 4
 };
 
+const ingredient_prices = {
+    salad: 0.5,
+    bacon: 1.2,
+    cheese: 1,
+    meat: 0.8
+}
+
+
 const reducer = (state = initialState, action) => {
 
     if (action.type === actionTypes.ADD_INGREDIENT) {
@@ -19,7 +27,8 @@ const reducer = (state = initialState, action) => {
             ingredients: {
                 ...state.ingredients,
                 [action.ingredientName]:  state.ingredients[[action.ingredientName]] + 1     //ta składnia sprawia ze nazwe property moze byc ze zmienej 
-            }
+            },
+            totalPrice: state.totalPrice + ingredient_prices[action.ingredientName]
         }
     }
 
@@ -30,7 +39,8 @@ const reducer = (state = initialState, action) => {
             ingredients: {
                 ...state.ingredients,
                 [action.ingredientName]: (state.ingredients[[action.ingredientName]] > 0) ? state.ingredients[[action.ingredientName]]  - 1  : 0    //ta składnia sprawia ze nazwe property moze byc ze zmienej 
-            }
+            },
+            totalPrice: state.totalPrice - ingredient_prices[action.ingredientName]
         }
     }   
 

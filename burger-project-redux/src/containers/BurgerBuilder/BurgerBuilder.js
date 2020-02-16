@@ -29,8 +29,6 @@ const ingredient_prices = {
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients: null,
-        totalPrice: 4,
         purchasing: false,
         loading: false,
         error: false
@@ -46,75 +44,17 @@ class BurgerBuilder extends Component {
         //     })
     }
 
-    addIngredientHandler  = (type) => {
-        const updatedCounted = this.state.ingredients[type] + 1;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        }; //w ten sposób robimy głęboką kopię obiektu 
-        updatedIngredients[type] = updatedCounted;
-        this.setState({
-            totalPrice: ingredient_prices[type] + this.state.totalPrice,
-            ingredients:updatedIngredients
-        })
 
-    };
 
-    removeIngredientHandler = (type, change) => {
-        if (this.state.ingredients[type] <=0) {
-            return;
-        }
-        const updatedCounted =   this.state.ingredients[type] + change  ;
-        const updatedIngredients = {
-            ...this.state.ingredients
-        }; //w ten sposób robimy głęboką kopię obiektu   
-        updatedIngredients[type] = updatedCounted;
-        this.setState({
-            totalPrice: change * ingredient_prices[type] + this.state.totalPrice,
-            ingredients:updatedIngredients
-        })             
-    }
 
     purchaseHandler = () => {
         this.setState({purchasing: !this.state.purchasing});
     }
 
-    purchaseContinueHandler = () => {
-        this.setState({loading:true});
-        // console.log('dalej');
-        const orders = {
-            ingredients: this.state.ingredients,
-            totalPrice: this.state.totalPrice,
-            customer: {
-                name: 'Jan',
-                address: {
-                    stret: "test",
-                    zipcode: "111"
-                },
-                email: 'test@test.com'
 
-            },
-            deliveryMethod: 'dron'
-        };
-        axios.post('/orders.json' , orders).then( res => {
-            // console.log(res);
-            this.setState({loading:false, purchasing : false});
-        }).catch( err=> {
-            console.log(err);
-            this.setState({loading:false, purchasing : false});
-        })
-
-    }  ; 
 
     goToCheckout = () => {
-        // console.log(this.props);
-        const ingredientsToPass = JSON.stringify(this.state.ingredients);
-        const totalPriceToPass = JSON.stringify(this.state.totalPrice);
-        this.props.history.push('/checkout?ingredients=' + encodeURIComponent(ingredientsToPass) + "&totalPrice=" + encodeURIComponent(totalPriceToPass) );
-        // this.props.history.push({
-        //     pathname: '/checkout',
-        //     // search: '?' + encodeURIComponent(ingredientsToPass)
-        //     search: ingredientsToPass
-        // })
+        this.props.history.push('/checkout');
     }
 
     render () {
@@ -137,7 +77,7 @@ class BurgerBuilder extends Component {
                             clickBtn={this.props.onRemoveIngredient}
 
 
-                            price={this.state.totalPrice}
+                            price={this.props.reduxTotalPrice}
                             orderClick={this.purchaseHandler}
                         />
                 </ReactAux>
@@ -146,9 +86,9 @@ class BurgerBuilder extends Component {
 
         let inModalEl = null;
 
-        if (this.state.ingredients) {
+        if (this.props.reduxIngredients) {
             inModalEl = <OrderSummary 
-                            dane={this.state}  
+                            dane={this.props}  
                             prices={ingredient_prices} 
                             closeModal={this.purchaseHandler} 
                             // goBuy={this.purchaseContinueHandler} 
