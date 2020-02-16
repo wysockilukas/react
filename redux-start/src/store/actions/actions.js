@@ -34,12 +34,35 @@ export const substract = (payload) => {
     }
 }
 
-export const store_result = (inVal) => {
+
+// export const store_result = (inVal) => {
+//     return {
+//         type: STORE_RESULT,
+//         result: inVal
+//     }
+// }
+
+
+
+
+//symulujemy asynchrninoicznosc
+
+export const saveResults =  (inVal) => { 
     return {
         type: STORE_RESULT,
         result: inVal
     }
 }
+
+export const store_result = (inVal) => {
+    return (dispatch) => {
+        setTimeout( () => {
+            dispatch(saveResults(inVal));
+        }, 2000)
+    }
+
+}
+
 
 export const delete_result = (keyVal) => {
     return {

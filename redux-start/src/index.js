@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {createStore, combineReducers, applyMiddleware, compose} from 'redux';
 import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
 
 import './index.css';
 import App from './App';
@@ -17,6 +18,9 @@ const rootReducer = combineReducers({
 });
 
 
+
+//to nasz middlewear
+
 const logger = (store) =>{
     return (next) => {
         return (action) => {
@@ -28,10 +32,11 @@ const logger = (store) =>{
     }
 }
 
+
 // const store = createStore(rootReducer , applyMiddleware(logger));
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(rootReducer,  composeEnhancers(applyMiddleware(logger)));
+const store = createStore(rootReducer,  composeEnhancers(applyMiddleware(logger,thunk)));
 
 
 
