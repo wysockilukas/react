@@ -5,8 +5,8 @@ import ReactDOM from 'react-dom';
 import {BrowserRouter } from 'react-router-dom';
 
 import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 
 
 import './index.css';
@@ -15,9 +15,13 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 
-import reducer from './store/reducer';
+import burgerBuilderReducer from './store/reducers/burgerBuilder';
 
 
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+
+/*
 const logger = (store) => {
     return (next) =>  {
         return (action) => {
@@ -30,6 +34,14 @@ const logger = (store) => {
 };
 
 const store = createStore(reducer, applyMiddleware(logger) );
+*/
+
+const store = createStore(burgerBuilderReducer, composeEnhancers(
+    applyMiddleware(thunk)
+));
+
+// thunk jest po to zeby redux dzialal asynchronicznie
+
 const app = (
     <Provider store={store}>
         <BrowserRouter>

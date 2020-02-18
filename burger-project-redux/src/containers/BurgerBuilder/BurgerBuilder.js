@@ -14,7 +14,7 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 // import BackDrop from '../../components/UI/Backdrop/Backdrop';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-import * as actionTypes from '../../store/actions';;
+import * as burgerBuilderActions from '../../store/actions/index';
 
 
 /*
@@ -30,11 +30,13 @@ class BurgerBuilder extends Component {
 
     state = {
         purchasing: false,
-        loading: false,
-        error: false
+        // loading: false,
+        // error: false
     }
 
     componentDidMount() {
+        this.props.onInitIngredients()
+
         // console.log('Burger builder did mount i props to: ',  this.props);
         // axios.get('https://react-my-burger-11471.firebaseio.com/ingredients.json')
         //     .then( res => {
@@ -59,7 +61,7 @@ class BurgerBuilder extends Component {
 
     render () {
 
-        let burger = this.state.error ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+        let burger = this.props.reduxError ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
         // if (this.state.ingredients) {
         if (this.props.reduxIngredients) {
@@ -96,9 +98,9 @@ class BurgerBuilder extends Component {
                         />;
         }
 
-        if (this.state.loading) {
-            inModalEl = <Spinner /> ;
-        }
+        // if (this.state.loading) {
+        //     inModalEl = <Spinner /> ;
+        // }
 
 
         return (
@@ -117,14 +119,16 @@ class BurgerBuilder extends Component {
 const mapStateToProps = zz => {
     return {
         reduxIngredients: zz.ingredients,
-        reduxTotalPrice: zz.totalPrice
+        reduxTotalPrice: zz.totalPrice,
+        reduxError: zz.error
     }
 };
 
 const mapDispatchToProps = fn => {
     return {
-        onAddIngredient:    (type) => fn({type: actionTypes.ADD_INGREDIENT,    ingredientName: type}),
-        onRemoveIngredient: (type) => fn({type: actionTypes.REMOVE_INGREDIENT, ingredientName: type})
+        onAddIngredient:    (type) => fn( burgerBuilderActions.add_ingredient(type)   ),
+        onRemoveIngredient: (type) => fn(burgerBuilderActions.remove_ingredient(type)),
+        onInitIngredients: () => fn(burgerBuilderActions.initIngredients())
 
     }
 }
@@ -132,5 +136,6 @@ const mapDispatchToProps = fn => {
 
 // export default withErrorHandler( BurgerBuilder, axios );
 
-export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler( BurgerBuilder, axios )) ;
-// export default withErrorHandler(connect(mapStateToProps, mapDispatchToProps)( BurgerBuilder) , axios);
+// export default connect(mapStateToProps, mapDispatchToProps)(withErrorHandler( BurgerBuilder, axios )) ;
+// export default connect(mapStateToProps, mapDispatchToProps)( BurgerBuilder) ;
+export default withErrorHandler(connect(mapStateToProps, mapDispatchToProps)( BurgerBuilder) , axios);
