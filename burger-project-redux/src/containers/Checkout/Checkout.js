@@ -3,12 +3,14 @@ import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSumm
 import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
+import * as actions from '../../store/actions/index';
+
+
 import ContactData from './ContactData/ContactData';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 
 
 class Checkout extends Component {
-
 
 
     checkoutCancelledHandler = () => {
@@ -26,12 +28,17 @@ class Checkout extends Component {
 
     render () {
 
+            // console.log('asdsad', this.props.reduxIngredients)
+         let summar =  <Redirect to="/" />   
 
-         let summar = <Redirect to="/" />   
+          
 
          if (this.props.reduxIngredients) {
+            //  console.log('Jeste tu');
+            const purchasedRedirect = this.props.reduxpurchased ? <Redirect to="/"/> : null;
             summar = (
                 <>
+                    {purchasedRedirect}
                     <CheckoutSummary 
                     ingredients={this.props.reduxIngredients} 
                     checkoutCancelled = {this.checkoutCancelledHandler}
@@ -60,9 +67,17 @@ class Checkout extends Component {
 
 const mapStateToProps = zz => {
     return {
-        reduxIngredients: zz.ingredients
+        reduxIngredients: zz.burgerBuilder.ingredients,
+        reduxpurchased: zz.order.purchased
     }
 };
+
+
+// const mapDispatchToProps = fn => {
+//     return {
+//         onInitPurchase:    () => fn( actions.purchaseInit()   ),
+//     }
+// }
 
 
 export default connect(mapStateToProps)(Checkout);

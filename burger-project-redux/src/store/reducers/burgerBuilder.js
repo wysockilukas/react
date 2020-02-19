@@ -53,6 +53,7 @@ const reducer = (state = initialState, action) => {
             ...state,
             ingredients: action.ingredients,
             error: false,
+            totalPrice: 4,
         }
     }
 

@@ -14,7 +14,8 @@ import OrderSummary from '../../components/Burger/OrderSummary/OrderSummary';
 // import BackDrop from '../../components/UI/Backdrop/Backdrop';
 import Spinner from '../../components/UI/Spinner/Spinner';
 
-import * as burgerBuilderActions from '../../store/actions/index';
+
+import * as actions from '../../store/actions/index';
 
 
 /*
@@ -56,6 +57,7 @@ class BurgerBuilder extends Component {
 
 
     goToCheckout = () => {
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     }
 
@@ -126,9 +128,10 @@ const mapStateToProps = zz => {
 
 const mapDispatchToProps = fn => {
     return {
-        onAddIngredient:    (type) => fn( burgerBuilderActions.add_ingredient(type)   ),
-        onRemoveIngredient: (type) => fn(burgerBuilderActions.remove_ingredient(type)),
-        onInitIngredients: () => fn(burgerBuilderActions.initIngredients())
+        onAddIngredient:    (type) => fn( actions.add_ingredient(type)   ),
+        onRemoveIngredient: (type) => fn(actions.remove_ingredient(type)),
+        onInitIngredients: () => fn(actions.initIngredients()),
+        onInitPurchase:    () => fn( actions.purchaseInit()   ),
 
     }
 }
