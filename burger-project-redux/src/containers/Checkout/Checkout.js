@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
-import {Route} from 'react-router-dom';
+import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
 
 import ContactData from './ContactData/ContactData';
@@ -27,14 +27,24 @@ class Checkout extends Component {
     render () {
 
 
-         let   summar = (
-                <CheckoutSummary 
-                ingredients={this.props.reduxIngredients} 
-                checkoutCancelled = {this.checkoutCancelledHandler}
-                checkoutContinued = {this.checkoutContinuedHandler}
-                />              
+         let summar = <Redirect to="/" />   
+
+         if (this.props.reduxIngredients) {
+            summar = (
+                <>
+                    <CheckoutSummary 
+                    ingredients={this.props.reduxIngredients} 
+                    checkoutCancelled = {this.checkoutCancelledHandler}
+                    checkoutContinued = {this.checkoutContinuedHandler}
+                    /> 
+                    
+                    <Route 
+                    path={this.props.match.path + '/contact-data'} 
+                    component = {ContactData}
+                    />
+                </>
             )
-        
+         }
 
         return (
             <div>
@@ -42,10 +52,6 @@ class Checkout extends Component {
                 {/* <Route path="/checkout/contact-data" component = {ContactData}/> */}
                 {/* ten rout na dole nie spowoduje ponownego renderowania komponetu na gorze czyli didmount nie wykona sie drugi raz */}
                 {/* <Route path={this.props.match.path + '/contact-data'} component = {ContactData}/> */}
-                <Route 
-                    path={this.props.match.path + '/contact-data'} 
-                    component = {ContactData}
-                />
             </div>
         )
     }

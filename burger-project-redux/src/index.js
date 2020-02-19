@@ -16,10 +16,15 @@ import * as serviceWorker from './serviceWorker';
 
 
 import burgerBuilderReducer from './store/reducers/burgerBuilder';
+import orderReducer from './store/reducers/order';
 
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
+const rootReducer = combineReducers({
+    burgerBuilder: burgerBuilderReducer,
+    order: orderReducer
+}); 
 
 /*
 const logger = (store) => {
@@ -36,7 +41,7 @@ const logger = (store) => {
 const store = createStore(reducer, applyMiddleware(logger) );
 */
 
-const store = createStore(burgerBuilderReducer, composeEnhancers(
+const store = createStore(rootReducer, composeEnhancers(
     applyMiddleware(thunk)
 ));
 

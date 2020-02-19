@@ -5,6 +5,10 @@ import {connect} from 'react-redux';
 import Button from '../../../components/UI/Button/Button';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
+import * as actions from '../../../store/actions/index';
+
+
+
 
 import classes from './ContactData.module.css';
 
@@ -93,7 +97,6 @@ class ContactData extends Component {
                 valid:true
             }
         },
-        loading: false,
         formValid: false
     }
 
@@ -115,21 +118,14 @@ class ContactData extends Component {
 
 
         // console.log(formData);
-        this.setState({loading:true});
+        // this.setState({loading:true});
         const orders = {
             ingredients: this.props.reduxIngredients,
             totalPrice: this.props.reduxTotalPrice,
             orderData: formData
         };
-        axios.post('/orders.json' , orders).then( res => {
-            // console.log(res);
-            this.setState({loading:false});
-            this.props.history.replace('/');
-        }).catch( err=> {
-            console.log(err);
-            this.setState({loading:false});
-        })
-
+   
+        this.props.onOrderBurger(orders);
 
     }
 
@@ -219,7 +215,7 @@ class ContactData extends Component {
             </form>
         )
 
-        if (this.state.loading) {
+        if (this.props.reduxLoading) {
             form = <Spinner />
         }
         return (
@@ -235,11 +231,18 @@ class ContactData extends Component {
 
 const mapStateToProps = zz => {
     return {
-        reduxIngredients: zz.ingredients,
-        reduxTotalPrice: zz.totalPrice
+        reduxIngredients: zz.burgerBuilder.ingredients,
+        reduxTotalPrice: zz.burgerBuilder.totalPrice,
+        reduxLoading: zz.order.loading
     }
 };
 
+const mapDispatchToProps = fn => {
+    return {
+        onOrderBurger:    (orderData) => fn( actions.purchaseBurger(orderData)   ),
+    }
+}
 
-export default connect(mapStateToProps)(ContactData);
+
+export default connect(mapStateToProps,mapDispatchToProps)(ContactData);
 
