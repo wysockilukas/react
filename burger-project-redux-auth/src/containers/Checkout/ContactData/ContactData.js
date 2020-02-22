@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import axios from '../../../axios-orders';
+// import axios from '../../../axios-orders';
 import {connect} from 'react-redux';
 
 import Button from '../../../components/UI/Button/Button';
@@ -125,7 +125,7 @@ class ContactData extends Component {
             orderData: formData
         };
    
-        this.props.onOrderBurger(orders);
+        this.props.onOrderBurger(orders, this.props.token);
 
     }
 
@@ -233,13 +233,14 @@ const mapStateToProps = zz => {
     return {
         reduxIngredients: zz.burgerBuilder.ingredients,
         reduxTotalPrice: zz.burgerBuilder.totalPrice,
-        reduxLoading: zz.order.loading
+        reduxLoading: zz.order.loading,
+        token: zz.auth.token
     }
 };
 
 const mapDispatchToProps = fn => {
     return {
-        onOrderBurger:    (orderData) => fn( actions.purchaseBurger(orderData)   ),
+        onOrderBurger:    (orderData, token) => fn( actions.purchaseBurger(orderData, token)   ),
     }
 }
 

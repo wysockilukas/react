@@ -2,9 +2,11 @@ import React, {Component} from 'react';
 import {connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
+
 
 
 class Auth extends Component {
@@ -40,7 +42,8 @@ class Auth extends Component {
                 touched: false
             }            
         },
-        formValid: false
+        formValid: false,
+        isSignUp : true
     }
 
 
@@ -51,9 +54,9 @@ class Auth extends Component {
             formData[name] = this.state.controls[name].value;
         }  );
         
-        console.log(formData);
+        // console.log(formData);
 
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value);
+        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
     }
 
 
@@ -97,6 +100,15 @@ class Auth extends Component {
         });
     }
    
+    switchAuthModeHandler = () => {
+        // this.setState({
+        //     isSignUp: false
+        // })
+        // console.log('Klikam')
+        this.setState( prevState => {
+            return {isSignUp: !prevState.isSignUp}
+        })
+    }
 
     render () {
 
@@ -126,23 +138,48 @@ class Auth extends Component {
             </form>
         )
  
+        if (this.props.reduxLoading) {
+            form = <Spinner />;
+        }
 
+        let errorMsg = null;
+        if (this.props.reduxError) {
+            errorMsg = (
+                <p style={{color:"red"}}>
+                    {this.props.reduxError.message} 
+                    {/* <br /> */}
+                    {/* {this.props.reduxError.errors[0].message}  */}
+                    {/* {console.log(this.props.reduxError)} */}
+                </p>
+            )
+        }
+        
         return (
             <div className = {classes.Auth} >
+                {errorMsg}
                 {form}
+                <Button btnType="Danger" clicked={this.switchAuthModeHandler}>{this.state.isSignUp ? 'Zaloguj się' : 'Załóż konto'} </Button>
             </div>
         )
     }
 }
 
 
+const mapStateToProps = zz => {
+    return {
+        reduxLoading: zz.auth.loading,
+        reduxError: zz.auth.error
+    }
+};
+
+
 const mapDispatchToProps = fn => {
     return {
-        onAuth: (email, password) => fn( actions.auth(email, password)  ),
+        onAuth: (email, password, isSignup) => fn( actions.auth(email, password, isSignup)  ),
     }
 }
 
 
 // export default Auth;
 
-export default connect(null,mapDispatchToProps)(Auth);
+export default connect(mapStateToProps,mapDispatchToProps)(Auth);
