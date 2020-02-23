@@ -10,7 +10,7 @@ import Button from '../../../components/UI/Button/Button';
 
 const orderSummary = (props) => {
 
-    console.log('orderSummary ', props);
+    // console.log('orderSummary ', props);
 
     const ingred = Object.keys(props.dane.reduxIngredients).map( (el, idx) =>{
         return (

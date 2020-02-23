@@ -26,6 +26,7 @@ export const authFail = (error) => {
 
 
 export const logout = () => {
+    console.log('Wyologwuje');
     return {
         type: actionTypes.AUTH_LOGOUT
     };
@@ -72,3 +73,11 @@ export const auth = (email, password, isSignup) => {
             });
     };
 };
+
+
+export const setAuthRedirectPath = (path) =>{
+    return {
+        type: actionTypes.SET_AUTH_REDIRECT_PATH,
+        path: path
+    }
+}

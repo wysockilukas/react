@@ -3,6 +3,7 @@ import {connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import Spinner from '../../components/UI/Spinner/Spinner';
+import {Redirect} from 'react-router-dom';
 
 import classes from './Auth.module.css';
 import * as actions from '../../store/actions/index';
@@ -153,9 +154,15 @@ class Auth extends Component {
                 </p>
             )
         }
+
+        let authRedirect = null;
+        if (this.props.isAuthenticated) {
+            authRedirect = <Redirect to="/" />
+        }
         
         return (
             <div className = {classes.Auth} >
+                {authRedirect}
                 {errorMsg}
                 {form}
                 <Button btnType="Danger" clicked={this.switchAuthModeHandler}>{this.state.isSignUp ? 'Zaloguj się' : 'Załóż konto'} </Button>
@@ -168,7 +175,8 @@ class Auth extends Component {
 const mapStateToProps = zz => {
     return {
         reduxLoading: zz.auth.loading,
-        reduxError: zz.auth.error
+        reduxError: zz.auth.error,
+        isAuthenticated: zz.auth.token !==null
     }
 };
 

@@ -3,7 +3,8 @@ import * as actionTypes from '../actions/actionTypes';
 const initialState = {
     ingredients: null,
     totalPrice: 4,
-    error:false
+    error:false,
+    building: false
 };
 
 const ingredient_prices = {
@@ -24,7 +25,8 @@ const reducer = (state = initialState, action) => {
                 ...state.ingredients,
                 [action.ingredientName]:  state.ingredients[[action.ingredientName]] + 1     //ta składnia sprawia ze nazwe property moze byc ze zmienej 
             },
-            totalPrice: state.totalPrice + ingredient_prices[action.ingredientName]
+            totalPrice: state.totalPrice + ingredient_prices[action.ingredientName],
+            building: true
         }
     }
 
@@ -36,7 +38,8 @@ const reducer = (state = initialState, action) => {
                 ...state.ingredients,
                 [action.ingredientName]: (state.ingredients[[action.ingredientName]] > 0) ? state.ingredients[[action.ingredientName]]  - 1  : 0    //ta składnia sprawia ze nazwe property moze byc ze zmienej 
             },
-            totalPrice: state.totalPrice - ingredient_prices[action.ingredientName]
+            totalPrice: state.totalPrice - ingredient_prices[action.ingredientName],
+            building: true
         }
     }   
 
@@ -48,12 +51,13 @@ const reducer = (state = initialState, action) => {
     }
 
     if (action.type ===actionTypes.SET_INGREDIENTS) {
-        console.log(action.ingredients);
+        // console.log(action.ingredients);
         return {
             ...state,
             ingredients: action.ingredients,
             error: false,
             totalPrice: 4,
+            building: false
         }
     }
 

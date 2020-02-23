@@ -41,7 +41,11 @@ const buildControls = (props) => {
             {controlsComponents}
             { 
                 (
-                     (props.price <=4) ?  <button disabled className={classes.OrderButton}>ZAMÓW</button> : <button onClick={props.orderClick} className={classes.OrderButton}>ZAMÓW</button>
+                    (props.isAuth) 
+                        ? (props.price > 4) 
+                            ? <button onClick={props.orderClick} className={classes.OrderButton}>ZAMÓW</button>
+                            : <button disabled className={classes.OrderButton}>SKŁADNIKI</button> 
+                        : <button onClick={props.orderClick}  className={classes.OrderButton}>ZALOGUJ SIĘ</button> 
                 )
             }
             
@@ -50,3 +54,4 @@ const buildControls = (props) => {
 } 
 
 export default buildControls;
+

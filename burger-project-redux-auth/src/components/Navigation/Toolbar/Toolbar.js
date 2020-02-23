@@ -12,7 +12,7 @@ const toolbar = (props)=> {
             {/* <div onClick={props.toogleMenu}>MENU</div> */}
             <div><Logo height="50px"/></div>
             <nav className={classes.DesktopOnly}>
-                <NavigationItems />
+                <NavigationItems isAuth={props.isAuth} />
             </nav>
         </header>
     )
