@@ -7,7 +7,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import * as actions from '../../../store/actions/index';
 
-
+import {checkValidity} from '../../../shared/utility';
 
 
 import classes from './ContactData.module.css';
@@ -131,25 +131,7 @@ class ContactData extends Component {
     }
 
 
-    // checkValidity(value, rules) {
-    //     let isValid = false
-    //     if (rules.required) {
-    //        isValid = (value.trim() !='') 
-    //     }
-    //     return isValid;
-    // }
 
-    checkValidity = (value, rules) => {
-        if (Object.keys(rules).length === 0) return true;
-        let isValid = false
-        if (rules.required) {
-           isValid = (value.trim() !=='') 
-        }
-        if (rules.minLenght) {
-            isValid = (value.length >=rules.minLenght)
-        }
-        return isValid;
-    }
 
     inputChangedHandler = (event, inputIdentifier) => {
         // console.log(event.target.value);
@@ -158,7 +140,7 @@ class ContactData extends Component {
         };
         const updatedOrderFormElement = {...updatedOrderForm[inputIdentifier]};
         updatedOrderFormElement.value = event.target.value;
-        updatedOrderFormElement.valid = this.checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
+        updatedOrderFormElement.valid = checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
         updatedOrderFormElement.touched = true;
 
 
