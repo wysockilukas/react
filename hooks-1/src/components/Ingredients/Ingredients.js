@@ -4,9 +4,12 @@ import axios from 'axios';
 import IngredientForm from './IngredientForm';
 import IngredientList from './IngredientList';
 import Search from './Search';
+import ErrorModal from '../UI/ErrorModal';
 
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState();
 
 
 
@@ -46,30 +49,53 @@ function Ingredients() {
   },  []);
 
   const AddIngredientsHandler = (ing) => {
-
+    setIsLoading(true);
     axios.post('https://react-hooks-11471.firebaseio.com/ingredients.json',ing)
       .then( res => {
           // console.log('res', res);
           // setIngredients( prevIng => [...prevIng, {id: Math.random().toString(), ...ing}]     )
           setIngredients( prevIng => [...prevIng, {id: res.data.name, ...ing}]     )
+          setIsLoading(false);
       }).catch (err => {
-        console.log('err', err);
+        // console.log('err', err);
+        setError(err.message);
+        setIsLoading(false);
       })
 
 
   }
 
   const RemoveItemHandler = (receivedId) => {
+    setIsLoading(true);
+
+    axios.delete(`https://react-hooks-11471.firebaseio.com/ingredients/${receivedId}.json`)
+      .then( res => {
+        setIngredients( prevIng => prevIng.filter( el => el.id !== receivedId));
+        setIsLoading(false);
+
+      }).catch (err => {
+        //  console.log('err', err.message);
+        //! jak w jednym bloku mamy dwa set... to sa uruchamiane razem i razem powoduje renedorwaie kompoinentu
+        setError(err.message);
+        setIsLoading(false);
+      })
+
+  
 
     /* Moje rowiazanie */
     // const newIngredients = ingredients.filter( el => el.id !== receivedId)
     // setIngredients( newIngredients );
-    setIngredients( prevIng => prevIng.filter( el => el.id !== receivedId));
+  }
+
+  const clearError = () => {
+    setError(null); //jak zmieni sie state to renedruja sie strona i modal  z errorem nie wyskoczy
+    setIsLoading(false);
   }
 
   return (
     <div className="App">
-      <IngredientForm onAddIngred={AddIngredientsHandler}/>
+      {error && <ErrorModal onClose={clearError}>{error}</ErrorModal>}
+      <IngredientForm onAddIngred={AddIngredientsHandler} loading={isLoading}/>
 
       <section>
         <Search onLoadIngredients={filteredIngredientHandler} />
