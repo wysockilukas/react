@@ -6,12 +6,16 @@ import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 
+import {getData, getData2} from '../../utils/fetchData';
+
 function Ingredients() {
   const [ingredients, setIngredients] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [pracownik, setPracownik] = useState('');
   const [error, setError] = useState();
 
 
+  
 
 /*
    //to sie odpala jak komponent sie wyrenderuje i dla kazdego cylu renderowania
@@ -36,6 +40,13 @@ function Ingredients() {
   }, [] );   
 
 */
+
+  useEffect( () => {
+    getData2().then(res => {
+      console.log(res);
+      setPracownik(res.rows[78].LAST_NAME);
+    });
+  }, []);
 
   useEffect( () => {
     console.log('RENDERING INGREDIENTS',);
@@ -101,6 +112,7 @@ function Ingredients() {
         <Search onLoadIngredients={filteredIngredientHandler} />
         <IngredientList ingredients ={ingredients}   onRemoveItem={ RemoveItemHandler  }/>
       </section>
+       <p>{pracownik}</p>
     </div>
   );
 }
