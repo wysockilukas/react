@@ -3,13 +3,14 @@ import {BrowserRouter, Route, Switch, Link}  from 'react-router-dom';
 
 import Page1 from './pages/Page1/Page1';
 import Page2 from './pages/Page2/Page2';
+import Page3 from './pages/Page3/Page3';
 
 
 
 import './App.css';
 
 
-
+// https://www.robinwieruch.de/react-hooks-fetch-data
 
 
 
@@ -17,11 +18,13 @@ function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <Link to="/page1">Page1</Link>
-        <Link to="/page2">Page2</Link>
+        <Link to="/page1">Simple</Link><br />
+        <Link to="/page2">+error i spinner</Link><br />
+        <Link to="/page3">custom hook</Link><br />
         <Switch>
             <Route exact path="/page1"   component = {Page1}    /> 
             <Route exact  path="/page2"   component = {Page2}    /> 
+            <Route exact  path="/page3"   component = {Page3}    /> 
         </Switch>        
       </BrowserRouter>
     </div>
