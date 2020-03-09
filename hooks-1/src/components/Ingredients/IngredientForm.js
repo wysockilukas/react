@@ -5,7 +5,7 @@ import LoadingIndicator from '../UI/LoadingIndicator'
 import './IngredientForm.css';
 
 const IngredientForm = React.memo(props => {
-
+   console.log('Jest props w form ', props);
   /*
   const [inputState, setInputState] = useState({
     title: '',
@@ -48,6 +48,7 @@ const IngredientForm = React.memo(props => {
             <button type="submit">Add Ingredient</button>
               {props.loading && <LoadingIndicator /> }
           </div>
+              {console.log('Jest render w form ')}
         </form>
       </Card>
     </section>

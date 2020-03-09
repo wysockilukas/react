@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useReducer, useRef} from 'react';
+import React, {useState, useEffect, useCallback, useReducer, useRef, useMemo} from 'react';
 import axios from 'axios';
 
 import IngredientForm from './IngredientForm';
@@ -6,7 +6,7 @@ import IngredientList from './IngredientList';
 import Search from './Search';
 import ErrorModal from '../UI/ErrorModal';
 
-import {getData, getData2} from '../../utils/fetchData';
+import {getData, getData2, getAll} from '../../utils/fetchData';
 
 
 // to jest poza glowna funckja , ale moze byc tez wewntarz jesli potrzebujemy propsy
@@ -44,13 +44,14 @@ function Ingredients() {
 
   const [ingredients, dispatch] = useReducer(ingredientReducer, []);  //drugi parametr jest opcjonalny, to inicjlany stan, u nas pusta tablica
   const [httpState, dispatchHttp] = useReducer(httpReducer, {isLoading:false, error:null}); 
+  const [test, setTest] = useState(null);
 
   // const [ingredients, setIngredients] = useState([]);
   // const [isLoading, setIsLoading] = useState(false);
   // const [error, setError] = useState();
 
 
-  const [pracownik, setPracownik] = useState('');
+  // const [pracownik, setPracownik] = useState('');
 
   
  // reducer to funcke ktora biora jakis input i zwracaja output
@@ -80,16 +81,31 @@ function Ingredients() {
 
 */
 
-  useEffect( () => {
-    getData2().then(res => {
-      console.log(res);
-      setPracownik(res.rows[78].LAST_NAME);
-    });
-  }, []);
+  // useEffect( () => {
+  //   getData2().then(res => {
+  //     console.log(res);
+  //     setPracownik(res.rows[78].LAST_NAME);
+  //   });
+  // }, []);
 
   useEffect( () => {
     console.log('RENDERING INGREDIENTS',);
   }, [ingredients])  //uruchomi sie jak sie zmieniu ingredients
+
+
+  const fetchData = async () => {
+    const cos = await getAll();
+    setTest(cos);
+  };
+  
+
+  useEffect(  () => {
+    // const cos = await getAll();
+    // console.log('Cos ', cos)
+    fetchData();
+
+  },[])  
+
 
 
   // useCallback chodzi o to zeby ta funckjja nie zmieniala sie z kazdym cyklem render
@@ -99,7 +115,7 @@ function Ingredients() {
     dispatch({type: 'SET', ingredients:ing});
   },  []);
 
-  const AddIngredientsHandler = (ing) => {
+  const AddIngredientsHandler = useCallback((ing) => {
     // setIsLoading(true);
     dispatchHttp({type:'SEND'});
     axios.post('https://react-hooks-11471.firebaseio.com/ingredients.json',ing)
@@ -119,9 +135,9 @@ function Ingredients() {
       })
 
 
-  }
-
-  const RemoveItemHandler = (receivedId) => {
+  } , []
+)
+  const RemoveItemHandler = useCallback((receivedId) => {
     // setIsLoading(true);
     dispatchHttp({type:'SEND'});
     axios.delete(`https://react-hooks-11471.firebaseio.com/ingredients/${receivedId}.json`)
@@ -138,19 +154,25 @@ function Ingredients() {
         // setIsLoading(false);
         dispatchHttp({type:'ERROR', errorData:err.message});
       })
-
-  
-
     /* Moje rowiazanie */
     // const newIngredients = ingredients.filter( el => el.id !== receivedId)
     // setIngredients( newIngredients );
-  }
+  }, [] );
 
-  const clearError = () => {
+  const clearError = useCallback(() => {
     // setError(null); //jak zmieni sie state to renedruja sie strona i modal  z errorem nie wyskoczy
     // setIsLoading(false);
     dispatchHttp({type:'RESPONSE'});
-  }
+  }, []);
+
+  // hook use memo spraw ze ta zmienna sie zmieni tylko wtedy gdy zmieni sie [ingredients,RemoveItemHandler]
+  // a jak sie nie zmieni to ten kompoent nie bedzie renderowany
+  // mozna tez bylo uzyc reactMemo na komponencie
+  // to tez zoncza ze ta zmienna ingredientList nie bedzie jkalkulowana po przy kazdym renderowaniu komponentu, bo nie zawsze sie zmienia
+  // my wskazujemy ze kiedy sie zmienia, czyli gdzy zmieni sie [ingredients,RemoveItemHandler] 
+  const ingredientList =  useMemo( () => {
+    return <IngredientList ingredients ={ingredients}   onRemoveItem={ RemoveItemHandler  }/>;
+  }, [ingredients,RemoveItemHandler]);
 
   return (
     <div className="App">
@@ -159,9 +181,9 @@ function Ingredients() {
 
       <section>
         <Search onLoadIngredients={filteredIngredientHandler} />
-        <IngredientList ingredients ={ingredients}   onRemoveItem={ RemoveItemHandler  }/>
+        {ingredientList}
       </section>
-       <p>{pracownik}</p>
+       {/* <p>{pracownik}</p> */}
     </div>
   );
 }
