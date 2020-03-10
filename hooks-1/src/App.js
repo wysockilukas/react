@@ -1,6 +1,6 @@
 import React, {useContext} from 'react';
 
-import Ingredients from './components/Ingredients/Ingredients';
+import Ingredients from './components/Ingredients/Ingredients2';
 import Auth from './components/Auth';
 import {AuthContext} from './context/auth-context';
 

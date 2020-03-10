@@ -1,55 +1,61 @@
-import React, {useState, useEffect, useRef} from 'react';
-import axios from 'axios';
+import React, { useState, useEffect, useRef } from 'react';
 
 import Card from '../UI/Card';
+import ErrorModal from '../UI/ErrorModal';
+import useHttp from '../../hooks/http';
 import './Search.css';
 
 const Search = React.memo(props => {
-  const {onLoadIngredients} = props;
-  const [ eneteredFilter , setEneteredFilter] = useState('');
+  const { onLoadIngredients } = props;
+  const [enteredFilter, setEnteredFilter] = useState('');
   const inputRef = useRef();
+  const { isLoading, data, error, sendRequest, clear } = useHttp();
 
-  //troche tai trik, bo ta funkcja uruchomi sie po kazdej zmiane w input, czyli nie musimy tam robic nalsuch na onchange
-  useEffect( () =>{
-
-  const timer=  setTimeout( () => {
-      //jesli po 500 ms wpiosany tesk sie nie zmieni
-      // console.log('eneteredFilter to ', eneteredFilter);
-      // console.log('inputRef.current.value to ', inputRef.current.value);
-      if (eneteredFilter===inputRef.current.value)  //to jest closuer wiec ten eneteredFilter jest wartoscia spzredd 5000 ms
-        {
-          const query =  eneteredFilter.length === 0 ? '' : `?orderBy="title"&equalTo="${eneteredFilter}"`;
-          axios.get('https://react-hooks-11471.firebaseio.com/ingredients.json' + query) 
-            .then( res => {
-                const fetchedData = Object.keys(res.data).map( key=> {
-                  return {
-                    id: key,
-                    title: res.data[key].title,
-                    amount: res.data[key].amount
-                  }
-                })
-              onLoadIngredients(fetchedData);
-       
-            }).catch (err => {
-              console.log('err', err);
-            })
-        }
-    }, 1000)
-    return  () => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (enteredFilter === inputRef.current.value) {
+        const query =
+          enteredFilter.length === 0
+            ? ''
+            : `?orderBy="title"&equalTo="${enteredFilter}"`;
+        sendRequest(
+          'https://react-hooks-update.firebaseio.com/ingredients.json' + query,
+          'GET'
+        );
+      }
+    }, 500);
+    return () => {
       clearTimeout(timer);
     };
-  }, [eneteredFilter,onLoadIngredients,inputRef]);
+  }, [enteredFilter, inputRef, sendRequest]);
+
+  useEffect(() => {
+    if (!isLoading && !error && data) {
+      const loadedIngredients = [];
+      for (const key in data) {
+        loadedIngredients.push({
+          id: key,
+          title: data[key].title,
+          amount: data[key].amount
+        });
+      }
+      onLoadIngredients(loadedIngredients);
+    }
+  }, [data, isLoading, error, onLoadIngredients]);
 
   return (
     <section className="search">
+      {error && <ErrorModal onClose={clear}>{error}</ErrorModal>}
       <Card>
         <div className="search-input">
           <label>Filter by Title</label>
-          <input type="text" 
-            ref = {inputRef}
-            value = {eneteredFilter} 
-            onChange={ event => {setEneteredFilter( event.target.value )  } } 
-            />
+          {isLoading && <span>Loading...</span>}
+          <input
+            ref={inputRef}
+            type="text"
+            value={enteredFilter}
+            onChange={event => setEnteredFilter(event.target.value)}
+          />
         </div>
       </Card>
     </section>
