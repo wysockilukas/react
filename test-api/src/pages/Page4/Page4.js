@@ -5,19 +5,19 @@ import EmployeeCard from '../../components/EmployeeCard/EmployeeCard';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import LoadingIndicator from '../../components/UI/LoadingIndicator';
 
-import {useDataApi} from '../../helper/fetchData';
+import {useDataApiReducer} from '../../helper/fetchData';
 
 
 
 
 
 
-const Page3 = () => {
-console.log('RENDERUJE PAGE 3')
+const Page4 = () => {
+console.log('RENDERUJE PAGE 4')
 
 const [query, setQuery] = useState('a');
 
-  const [{ data, isLoading, isError }, doFetch] = useDataApi('/api/a');
+  const [{ data, isLoading, isError }, doFetch] = useDataApiReducer('/api/a');
 
 
   const onChangeHandler = (event) => {
@@ -53,4 +53,4 @@ const [query, setQuery] = useState('a');
 }
 
 
-export default Page3;
+export default Page4;
