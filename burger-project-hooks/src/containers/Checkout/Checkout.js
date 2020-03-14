@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import CheckoutSummary from '../../components/Order/CheckoutSummary/CheckoutSummary';
 import {Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
@@ -10,43 +10,42 @@ import ContactData from './ContactData/ContactData';
 // import Spinner from '../../components/UI/Spinner/Spinner';
 
 
-class Checkout extends Component {
+const Checkout = props => {
 
 
-    checkoutCancelledHandler = () => {
+    const checkoutCancelledHandler = () => {
         // console.log(this.props);
-        this.props.history.goBack();
+        props.history.goBack();
     }
     
 
-    checkoutContinuedHandler = () => {
+    const checkoutContinuedHandler = () => {
         // console.log(this.props);
-        this.props.history.replace('/checkout/contact-data');
+        props.history.replace('/checkout/contact-data');
     }
 
 
 
-    render () {
 
             // console.log('asdsad', this.props.reduxIngredients)
          let summar =  <Redirect to="/" />   
 
           
 
-         if (this.props.reduxIngredients) {
+         if (props.reduxIngredients) {
             //  console.log('Jeste tu');
-            const purchasedRedirect = this.props.reduxpurchased ? <Redirect to="/"/> : null;
+            const purchasedRedirect = props.reduxpurchased ? <Redirect to="/"/> : null;
             summar = (
                 <>
                     {purchasedRedirect}
                     <CheckoutSummary 
-                    ingredients={this.props.reduxIngredients} 
-                    checkoutCancelled = {this.checkoutCancelledHandler}
-                    checkoutContinued = {this.checkoutContinuedHandler}
+                    ingredients={props.reduxIngredients} 
+                    checkoutCancelled = {checkoutCancelledHandler}
+                    checkoutContinued = {checkoutContinuedHandler}
                     /> 
                     
                     <Route 
-                    path={this.props.match.path + '/contact-data'} 
+                    path={props.match.path + '/contact-data'} 
                     component = {ContactData}
                     />
                 </>
@@ -61,7 +60,7 @@ class Checkout extends Component {
                 {/* <Route path={this.props.match.path + '/contact-data'} component = {ContactData}/> */}
             </div>
         )
-    }
+
 };
 
 

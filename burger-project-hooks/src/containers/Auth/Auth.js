@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {useState} from 'react';
 import {connect } from 'react-redux';
 import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
@@ -10,58 +10,57 @@ import * as actions from '../../store/actions/index';
 
 
 
-class Auth extends Component {
+const Auth = props => {
 
-    state = {
-        controls: {
-            email: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'email',
-                    placeholder: 'Email adres'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    isMail: true
-                },
-                valid: false,
-                touched: false
+    const [controls, setControls] = useState({
+        email: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'email',
+                placeholder: 'Email adres'
             },
-            password: {
-                elementType: 'input',
-                elementConfig: {
-                    type: 'password',
-                    placeholder: 'Password'
-                },
-                value: '',
-                validation: {
-                    required: true,
-                    minLength: 6
-                },
-                valid: false,
-                touched: false
-            }            
+            value: '',
+            validation: {
+                required: true,
+                isMail: true
+            },
+            valid: false,
+            touched: false
         },
-        formValid: false,
-        isSignUp : true
-    }
+        password: {
+            elementType: 'input',
+            elementConfig: {
+                type: 'password',
+                placeholder: 'Password'
+            },
+            value: '',
+            validation: {
+                required: true,
+                minLength: 6
+            },
+            valid: false,
+            touched: false
+        }            
+    });
+
+    const [formValid, setFormValid] = useState(false)
+    const [isSignUp, setIsSignUp] = useState(true)
 
 
-    submitHandler = (event) => {
+    const submitHandler = (event) => {
         event.preventDefault();
         const formData = {};
-        Object.keys(this.state.controls).forEach( name =>  {
-            formData[name] = this.state.controls[name].value;
+        Object.keys(controls).forEach( name =>  {
+            formData[name] = controls[name].value;
         }  );
         
         // console.log(formData);
 
-        this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
+        props.onAuth(controls.email.value, controls.password.value, isSignUp);
     }
 
 
-    checkValidity = (value, rules) => {
+    const checkValidity = (value, rules) => {
         if (Object.keys(rules).length === 0) return true;
         let isValid = false
         if (rules.required) {
@@ -73,14 +72,14 @@ class Auth extends Component {
         return isValid;
     }
 
-    inputChangedHandler = (event, inputIdentifier) => {
+    const inputChangedHandler = (event, inputIdentifier) => {
         // console.log(event.target.value);
         const updatedOrderForm = {
-            ...this.state.controls  //ten kolon nie jest gleboki bo biekt jest nested wiec zrobimy ten trik na tym co nam zwroci
+            ...controls  //ten kolon nie jest gleboki bo biekt jest nested wiec zrobimy ten trik na tym co nam zwroci
         };
         const updatedOrderFormElement = {...updatedOrderForm[inputIdentifier]};
         updatedOrderFormElement.value = event.target.value;
-        updatedOrderFormElement.valid = this.checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
+        updatedOrderFormElement.valid = checkValidity(updatedOrderFormElement.value, updatedOrderFormElement.validation);
         updatedOrderFormElement.touched = true;
 
 
@@ -94,34 +93,31 @@ class Auth extends Component {
             }
         }
 
-        
-        this.setState({
-            controls:updatedOrderForm,
-            formValid: formIsValid
-        });
+        setControls(updatedOrderForm);
+        setFormValid(formIsValid);
+
     }
    
-    switchAuthModeHandler = () => {
+    const switchAuthModeHandler = () => {
         // this.setState({
         //     isSignUp: false
         // })
         // console.log('Klikam')
-        this.setState( prevState => {
-            return {isSignUp: !prevState.isSignUp}
-        })
+
+        setIsSignUp( !isSignUp);
     }
 
-    render () {
+ 
 
         const formElementsArray = [];
-        for (let key in  this.state.controls) {
+        for (let key in  controls) {
                 formElementsArray.push( {
                     id: key,
-                    config: this.state.controls[key]
+                    config: controls[key]
                 } )
         }
         let form = (
-            <form onSubmit={this.submitHandler}>
+            <form onSubmit={submitHandler}>
                 {formElementsArray.map(el => (
                     <Input 
                         key={el.id} 
@@ -132,31 +128,31 @@ class Auth extends Component {
                         invalid={!el.config.valid}
                         shouldValidate={el.config.validation}
                         touched={el.config.touched}
-                        changed = {(event) => this.inputChangedHandler(event,el.id)}
+                        changed = {(event) => inputChangedHandler(event,el.id)}
                         />
                     ))}
-                <Button  disabled = {!this.state.formValid} btnType="Success"   value=""  >Subbmit</Button>
+                <Button  disabled = {!formValid} btnType="Success"   value=""  >Subbmit</Button>
             </form>
         )
  
-        if (this.props.reduxLoading) {
+        if (props.reduxLoading) {
             form = <Spinner />;
         }
 
         let errorMsg = null;
-        if (this.props.reduxError) {
+        if (props.reduxError) {
             errorMsg = (
                 <p style={{color:"red"}}>
-                    {this.props.reduxError.message} 
+                    {props.reduxError.message} 
                     {/* <br /> */}
-                    {/* {this.props.reduxError.errors[0].message}  */}
-                    {/* {console.log(this.props.reduxError)} */}
+                    {/* {props.reduxError.errors[0].message}  */}
+                    {/* {console.log(props.reduxError)} */}
                 </p>
             )
         }
 
         let authRedirect = null;
-        if (this.props.isAuthenticated) {
+        if (props.isAuthenticated) {
             authRedirect = <Redirect to="/" />
         }
         
@@ -165,10 +161,10 @@ class Auth extends Component {
                 {authRedirect}
                 {errorMsg}
                 {form}
-                <Button btnType="Danger" clicked={this.switchAuthModeHandler}>{this.state.isSignUp ? 'Zaloguj się' : 'Załóż konto'} </Button>
+                <Button btnType="Danger" clicked={switchAuthModeHandler}>{isSignUp ? 'Zaloguj się' : 'Załóż konto'} </Button>
             </div>
         )
-    }
+    
 }
 
 

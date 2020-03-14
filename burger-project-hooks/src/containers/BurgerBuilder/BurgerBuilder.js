@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import ReactAux from '../../hoc/ReactAux/ReactAux';
 
 
@@ -27,68 +27,57 @@ const ingredient_prices = {
     cheese: 1,
     meat: 0.8
 }
-class BurgerBuilder extends Component {
+const BurgerBuilder = (props) => {
 
-    state = {
-        purchasing: false,
-        // loading: false,
-        // error: false
-    }
 
-    componentDidMount() {
-        this.props.onInitIngredients()
+    
+    const [purchasing, setPurchasing] = useState(false);
 
-        // console.log('Burger builder did mount i props to: ',  this.props);
-        // axios.get('https://react-my-burger-11471.firebaseio.com/ingredients.json')
-        //     .then( res => {
-        //         this.setState({ingredients: res.data});
-        //     }).catch(err => {
-        //         this.setState({error: true})
-        //     })
-    }
+    useEffect(() => {
+        props.onInitIngredients();
+    }, [])
 
 
 
-
-    purchaseHandler = () => {
-        if (this.props.isAuthenticated) {
-            this.setState({purchasing: !this.state.purchasing});
+    const purchaseHandler = () => {
+        if (props.isAuthenticated) {
+            setPurchasing(!purchasing);
         } else {
-            this.props.onSetRedirectPath('/checkout')
-            this.props.history.push('/auth');
+            props.onSetRedirectPath('/checkout')
+            props.history.push('/auth');
         }
     }
 
 
 
-    goToCheckout = () => {
-        this.props.onInitPurchase();
-        this.props.history.push('/checkout');
+    const goToCheckout = () => {
+        props.onInitPurchase();
+        props.history.push('/checkout');
     }
 
-    render () {
 
-        let burger = this.props.reduxError ? <p>Ingredients can't be loaded!</p> : <Spinner />;
+
+        let burger = props.reduxError ? <p>Ingredients can't be loaded!</p> : <Spinner />;
 
         // if (this.state.ingredients) {
-        if (this.props.reduxIngredients) {
+        if (props.reduxIngredients) {
             burger = (
                 <ReactAux>
                         {/* <Burger ingredients = {this.state.ingredients}/> */}
-                        <Burger ingredients = {this.props.reduxIngredients}/>
+                        <Burger ingredients = {props.reduxIngredients}/>
 
 
                         <BuildControls 
                             // ingredientAdded={this.addIngredientHandler}
-                            ingredientAdded={this.props.onAddIngredient}
+                            ingredientAdded={props.onAddIngredient}
 
                             // clickBtn={this.removeIngredientHandler}
-                            clickBtn={this.props.onRemoveIngredient}
+                            clickBtn={props.onRemoveIngredient}
 
-                            isAuth={this.props.isAuthenticated}
+                            isAuth={props.isAuthenticated}
 
-                            price={this.props.reduxTotalPrice}
-                            orderClick={this.purchaseHandler}
+                            price={props.reduxTotalPrice}
+                            orderClick={purchaseHandler}
                         />
                 </ReactAux>
             );
@@ -96,13 +85,13 @@ class BurgerBuilder extends Component {
 
         let inModalEl = null;
 
-        if (this.props.reduxIngredients) {
+        if (props.reduxIngredients) {
             inModalEl = <OrderSummary 
-                            dane={this.props}  
+                            dane={props}  
                             prices={ingredient_prices} 
-                            closeModal={this.purchaseHandler} 
+                            closeModal={purchaseHandler} 
                             // goBuy={this.purchaseContinueHandler} 
-                            goBuy={this.goToCheckout} 
+                            goBuy={goToCheckout} 
                         />;
         }
 
@@ -113,14 +102,14 @@ class BurgerBuilder extends Component {
 
         return (
             <ReactAux>
-                <Modal show={this.state.purchasing} modalClosed={this.purchaseHandler} > 
+                <Modal show={purchasing} modalClosed={purchaseHandler} > 
                 {inModalEl}
                 </Modal>
                 {burger}
             </ReactAux>
         );
 
-    }
+    
 }
 
 
